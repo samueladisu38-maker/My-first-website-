@@ -1,0 +1,15 @@
+{
+  "short_name": "SamiApp",
+  "name": "Sami Photo Editor & Profile",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/8CN1dGy6/IMG-20251215-142927-839.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1a1a2e",
+  "background_color": "#1a1a2e"
+}
