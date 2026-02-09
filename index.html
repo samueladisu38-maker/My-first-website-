@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami - Software Developer</title>
+    <title>Sami - Profile & Photo Editor</title>
     <style>
-        /* ገጹ ሲከፈት የሚታይ አኒሜሽን */
-        @keyframes fadeInMove {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        /* ጠቅላላ ገጽታ */
         body {
             background-color: #1a1a2e;
             color: white;
@@ -18,13 +13,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             margin: 0;
             padding: 20px;
-            overflow: hidden;
         }
 
+        /* የፕሮፋይል ካርድ */
         .card {
             background-color: #16213e;
             padding: 30px;
@@ -32,9 +25,9 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             text-align: center;
             width: 90%;
-            max-width: 320px;
-            /* አኒሜሽኑ እዚህ ጋር ተጨምሯል */
-            animation: fadeInMove 1.2s ease-out;
+            max-width: 350px;
+            margin-bottom: 50px;
+            animation: fadeIn 1.5s;
         }
 
         .profile-img {
@@ -44,58 +37,50 @@
             border: 4px solid #e94560;
             object-fit: cover;
             margin-bottom: 15px;
-            transition: transform 0.4s;
         }
 
-        /* ፎቶው ላይ በጣት ስትነካው እንዲያድግ */
-        .profile-img:hover {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        h1 {
-            margin: 10px 0;
-            font-size: 26px;
-            color: #e94560;
-        }
-
-        p {
-            color: #adb0bb;
-            font-size: 15px;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
-
+        h1 { color: #e94560; margin: 10px 0; }
+        
         .btn {
             display: block;
-            margin: 12px 0;
+            margin: 10px 0;
             padding: 12px;
             color: white;
             text-decoration: none;
             border-radius: 12px;
             font-weight: bold;
-            transition: all 0.3s ease;
-            font-size: 16px;
-            position: relative;
-            overflow: hidden;
+            transition: 0.3s;
+        }
+        .tiktok-btn { background-color: #000; border: 1px solid #e94560; }
+        .telegram-btn { background-color: #0088cc; }
+
+        /* የፎቶ ኤዲተር ክፍል */
+        .editor-container {
+            background-color: #16213e;
+            padding: 25px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .tiktok-btn {
-            background-color: #000000;
-            border: 1px solid #e94560;
+        input[type="file"] {
+            margin: 20px 0;
+            color: #adb0bb;
         }
 
-        .telegram-btn {
-            background-color: #0088cc;
+        canvas {
+            max-width: 100%;
+            border-radius: 10px;
+            display: none;
+            filter: grayscale(100%); /* ፎቶውን ጥቁርና ነጭ ማድረጊያ */
+            margin-top: 15px;
         }
 
-        /* ቁልፎቹን ስትነካቸው የሚታይ ለውጥ */
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        .btn:hover {
-            letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -103,14 +88,40 @@
 
     <div class="card">
         <img src="https://i.postimg.cc/8CN1dGy6/IMG-20251215-142927-839.jpg" alt="Sami Profile" class="profile-img">
-        
         <h1>ሳሚ (Sami)</h1>
-        <p>የወደፊት የሶፍትዌር ዴቨሎፐር። በ IT እና በቴክኖሎጂ ዓለም አዳዲስ ነገሮችን መፍጠር እወዳለሁ።</p>
-        
-        <a href="https://www.tiktok.com/@samida0" target="_blank" class="btn tiktok-btn">TikTok @samida0</a>
-        
-        <a href="https://t.me/samso38" target="_blank" class="btn telegram-btn">Telegram @samso38</a>
+        <p>ሶፍትዌር ዴቨሎፐር</p>
+        <a href="https://www.tiktok.com/@samida0" target="_blank" class="btn tiktok-btn">TikTok</a>
+        <a href="https://t.me/samso38" target="_blank" class="btn telegram-btn">Telegram</a>
     </div>
+
+    <div class="editor-container">
+        <h2 style="color: #e94560;">ፎቶ ኤዲተር</h2>
+        <p style="font-size: 14px; color: #adb0bb;">ፎቶህን እዚህ ጨምርና ወደ ጥቁርና ነጭ ቀይረው</p>
+        <input type="file" id="uploadImage" accept="image/*">
+        <canvas id="photoCanvas"></canvas>
+    </div>
+
+    <script>
+        const upload = document.getElementById('uploadImage');
+        const canvas = document.getElementById('photoCanvas');
+        const ctx = canvas.getContext('2d');
+
+        upload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    canvas.style.display = 'block';
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
 
 </body>
 </html>
