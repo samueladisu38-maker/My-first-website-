@@ -1,2 +1,2 @@
-# My-first-website-
-Index.html
+# sami-portfolio-
+index.html
