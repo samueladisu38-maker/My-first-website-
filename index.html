@@ -3,130 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Entrance Prep - 2009-2016</title>
+    <title>Sami Entrance Prep - Pro</title>
     <style>
-        :root {
-            --primary: #2563eb;
-            --secondary: #1e293b;
-            --accent: #ef4444;
-            --bg: #f8fafc;
-        }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--secondary); }
-        header { background: var(--secondary); color: white; padding: 30px 10px; text-align: center; border-bottom: 4px solid var(--primary); }
-        .container { padding: 20px; max-width: 500px; margin: auto; }
-        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-        .category-btn { 
-            background: white; border: 1px solid #e2e8f0; padding: 18px; border-radius: 12px; 
-            font-size: 16px; font-weight: 600; cursor: pointer; text-align: left;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: 0.2s;
-        }
-        .category-btn:hover { border-color: var(--primary); background: #eff6ff; }
-        .quiz-box { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: none; }
-        .option-btn { 
-            display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #e2e8f0; 
-            border-radius: 10px; background: #fff; cursor: pointer; text-align: left; font-size: 15px;
-        }
-        .option-btn:hover { background: #f1f5f9; border-color: var(--primary); }
+        :root { --primary: #2563eb; --dark: #0f172a; --bg: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; text-align: center; }
+        header { background: var(--dark); color: white; padding: 25px; border-bottom: 4px solid var(--primary); }
+        .container { max-width: 500px; margin: 20px auto; padding: 15px; }
+        .card { background: white; padding: 20px; border-radius: 15px; shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 10px; cursor: pointer; border: 1px solid #e2e8f0; transition: 0.2s; }
+        .card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .quiz-box { display: none; background: white; padding: 25px; border-radius: 20px; text-align: left; }
+        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; background: white; cursor: pointer; font-size: 16px; }
+        .option-btn:hover { background: #f8fafc; border-color: var(--primary); }
         .correct { background: #dcfce7 !important; border-color: #22c55e !important; }
         .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; }
-        #score-page { text-align: center; display: none; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 style="margin:0;">SAMI ENTRANCE PREP</h1>
-    <p style="opacity: 0.8;">Grade 9-12 (2009 - 2016 E.C)</p>
+    <h1>SAMI ENTRANCE PREP</h1>
+    <p>Level: Grade 9 - 12 (Entrance Focus)</p>
 </header>
 
 <div class="container">
-    <div id="home-menu">
-        <h3 style="margin-bottom: 20px;">Select Subject:</h3>
-        <div class="menu-grid">
-            <button class="category-btn" onclick="startQuiz('Mathematics')">Mathematics <span>→</span></button>
-            <button class="category-btn" onclick="startQuiz('Physics')">Physics <span>→</span></button>
-            <button class="category-btn" onclick="startQuiz('Chemistry')">Chemistry <span>→</span></button>
-            <button class="category-btn" onclick="startQuiz('Biology')">Biology <span>→</span></button>
-            <button class="category-btn" onclick="startQuiz('English')">English <span>→</span></button>
-        </div>
+    <div id="subject-menu">
+        <h3>Step 1: Select Subject</h3>
+        <div class="card" onclick="chooseGrade('Mathematics')">Mathematics</div>
+        <div class="card" onclick="chooseGrade('Physics')">Physics</div>
+        <div class="card" onclick="chooseGrade('Chemistry')">Chemistry</div>
+        <div class="card" onclick="chooseGrade('Biology')">Biology</div>
+        <div class="card" onclick="chooseGrade('English')">English</div>
+    </div>
+
+    <div id="grade-menu" class="hidden">
+        <h3 id="selected-sub-text">Select Grade</h3>
+        <div class="card" onclick="startQuiz(9)">Grade 9</div>
+        <div class="card" onclick="startQuiz(10)">Grade 10</div>
+        <div class="card" onclick="startQuiz(11)">Grade 11</div>
+        <div class="card" onclick="startQuiz(12)">Grade 12</div>
+        <button onclick="goBack()" style="margin-top:10px; background:none; border:none; color:var(--primary); cursor:pointer;">← Back to Subjects</button>
     </div>
 
     <div id="quiz-section" class="quiz-box">
-        <div style="display: flex; justify-content: space-between; color: var(--primary); font-weight: bold; margin-bottom: 10px;">
-            <span id="subject-name">Subject</span>
-            <span id="progress">1/10</span>
+        <div style="display:flex; justify-content:space-between; font-weight:bold; color:var(--primary);">
+            <span id="display-info">Math - Grade 12</span>
+            <span id="progress">1/100</span>
         </div>
-        <p id="question-text" style="font-size: 18px; font-weight: 500;"></p>
+        <p id="question-text" style="font-size: 18px; margin: 20px 0; font-weight:600;"></p>
         <div id="options-container"></div>
     </div>
 
-    <div id="score-page" class="quiz-box">
-        <h2 style="color: var(--primary);">Quiz Completed!</h2>
-        <p style="font-size: 18px;">Your Final Score:</p>
-        <h1 id="final-score" style="font-size: 48px; margin: 10px 0;">0</h1>
-        <button class="category-btn" style="justify-content: center; background: var(--primary); color: white;" onclick="location.reload()">Back to Home</button>
+    <div id="result-page" class="quiz-box" style="text-align:center;">
+        <h2 color="var(--primary)">Quiz Finished!</h2>
+        <h1 id="final-score" style="font-size: 50px;">0</h1>
+        <button class="card" style="width:100%; background:var(--primary); color:white;" onclick="location.reload()">Restart App</button>
     </div>
 </div>
 
 <script>
-    // Database of Entrance Questions
-    const quizData = {
-        Mathematics: [
-            { q: "What is the derivative of f(x) = x²?", a: "2x", opt: ["x", "2x", "x²", "2"] },
-            { q: "Which of the following is a rational number?", a: "0.5", opt: ["π", "√2", "0.5", "e"] }
-        ],
-        Physics: [
-            { q: "What is the SI unit of work?", a: "Joule", opt: ["Newton", "Watt", "Joule", "Pascal"] },
-            { q: "Which law states that F = ma?", a: "Newton's 2nd Law", opt: ["Newton's 1st Law", "Newton's 2nd Law", "Ohm's Law", "Hooke's Law"] }
-        ],
-        Chemistry: [
-            { q: "What is the atomic number of Hydrogen?", a: "1", opt: ["1", "2", "6", "8"] },
-            { q: "Which bond involves sharing of electrons?", a: "Covalent", opt: ["Ionic", "Covalent", "Metallic", "Hydrogen"] }
-        ],
-        Biology: [
-            { q: "What is the basic unit of life?", a: "Cell", opt: ["Tissue", "Organ", "Cell", "DNA"] }
-        ],
-        English: [
-            { q: "Identify the synonym of 'Huge':", a: "Enormous", opt: ["Small", "Tiny", "Enormous", "Weak"] }
-        ]
+    let selectedSubject = "";
+    let selectedGrade = "";
+    let score = 0;
+    let currentIdx = 0;
+
+    // Database structure for 100 questions per grade
+    const database = {
+        "Mathematics": {
+            "12": [
+                { q: "What is the limit of (sin x)/x as x approaches 0?", a: "1", opt: ["0", "1", "Infinity", "-1"] },
+                { q: "Find the derivative of e^x.", a: "e^x", opt: ["xe^(x-1)", "e^x", "ln x", "1/x"] },
+                // You can add more questions here up to 100
+            ],
+            "11": [
+                { q: "What is the value of log10(100)?", a: "2", opt: ["1", "2", "3", "10"] }
+            ]
+            // Add Grade 9, 10 similarly
+        },
+        "Physics": {
+            "12": [
+                { q: "Which of the following is a vector quantity?", a: "Velocity", opt: ["Mass", "Time", "Velocity", "Temperature"] }
+            ]
+        }
     };
 
-    let currentQuestions = [];
-    let idx = 0;
-    let score = 0;
-
-    function startQuiz(sub) {
-        document.getElementById("home-menu").style.display = "none";
-        document.getElementById("quiz-section").style.display = "block";
-        document.getElementById("subject-name").innerText = sub;
-        currentQuestions = quizData[sub];
-        idx = 0;
-        score = 0;
-        showQ();
+    function chooseGrade(sub) {
+        selectedSubject = sub;
+        document.getElementById("subject-menu").classList.add("hidden");
+        document.getElementById("grade-menu").classList.remove("hidden");
+        document.getElementById("selected-sub-text").innerText = sub + ": Choose Grade";
     }
 
-    function showQ() {
-        const data = currentQuestions[idx];
-        document.getElementById("progress").innerText = `${idx + 1}/${currentQuestions.length}`;
-        document.getElementById("question-text").innerText = data.q;
+    function goBack() {
+        document.getElementById("subject-menu").classList.remove("hidden");
+        document.getElementById("grade-menu").classList.add("hidden");
+    }
+
+    function startQuiz(grade) {
+        selectedGrade = grade;
+        const questions = database[selectedSubject] && database[selectedSubject][grade];
+        
+        if (!questions) {
+            alert("Questions for this grade will be added soon!");
+            return;
+        }
+
+        document.getElementById("grade-menu").classList.add("hidden");
+        document.getElementById("quiz-section").style.display = "block";
+        document.getElementById("display-info").innerText = `${selectedSubject} - G${grade}`;
+        
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const questions = database[selectedSubject][selectedGrade];
+        const qData = questions[currentIdx];
+        
+        document.getElementById("progress").innerText = `${currentIdx + 1}/${questions.length}`;
+        document.getElementById("question-text").innerText = qData.q;
+        
         const container = document.getElementById("options-container");
         container.innerHTML = "";
-
-        data.opt.forEach(o => {
+        
+        qData.opt.forEach(o => {
             const btn = document.createElement("button");
             btn.className = "option-btn";
             btn.innerText = o;
-            btn.onclick = () => check(btn, o, data.a);
+            btn.onclick = () => checkAns(btn, o, qData.a);
             container.appendChild(btn);
         });
     }
 
-    function check(btn, selected, correct) {
-        const btns = document.querySelectorAll(".option-btn");
-        btns.forEach(b => b.disabled = true);
-
-        if(selected === correct) {
+    function checkAns(btn, sel, corr) {
+        if (sel === corr) {
             score++;
             btn.classList.add("correct");
         } else {
@@ -134,21 +143,21 @@
         }
 
         setTimeout(() => {
-            idx++;
-            if(idx < currentQuestions.length) {
-                showQ();
+            currentIdx++;
+            const questions = database[selectedSubject][selectedGrade];
+            if (currentIdx < questions.length) {
+                loadQuestion();
             } else {
-                showResult();
+                showScore(questions.length);
             }
-        }, 1000);
+        }, 800);
     }
 
-    function showResult() {
+    function showScore(total) {
         document.getElementById("quiz-section").style.display = "none";
-        document.getElementById("score-page").style.display = "block";
-        document.getElementById("final-score").innerText = `${score} / ${currentQuestions.length}`;
+        document.getElementById("result-page").style.display = "block";
+        document.getElementById("final-score").innerText = `${score} / ${total}`;
     }
 </script>
-
 </body>
-        </html>
+                </html>
