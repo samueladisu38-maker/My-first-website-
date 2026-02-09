@@ -3,72 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami's Task Manager</title>
+    <title>Sami Quiz - የእውቀት ፈተና</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
-        .app-container { background: white; width: 100%; max-width: 400px; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h2 { color: #333; text-align: center; }
-        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-        button#add-btn { background-color: #5c67f2; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; }
-        ul { list-style: none; padding: 0; }
-        li { background: #fff; border-bottom: 1px solid #eee; padding: 12px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
-        li.completed { text-decoration: line-through; color: #888; background: #f9f9f9; }
-        .delete-btn { color: #e94560; font-weight: bold; cursor: pointer; margin-left: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #1a1a2e; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .quiz-container { background: #16213e; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 90%; max-width: 400px; text-align: center; }
+        h2 { color: #4eeaf6; margin-bottom: 20px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        button { padding: 12px; border-radius: 10px; border: none; background: #0f3460; color: white; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #e94560; }
+        #score-text { font-size: 20px; font-weight: bold; color: #f1c40f; display: none; }
+        #next-btn { margin-top: 20px; background: #e94560; display: none; width: 100%; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <h2>Sami's Tasks 📝</h2>
-    <div class="input-group">
-        <input type="text" id="taskInput" placeholder="አዲስ ስራ ይጻፉ...">
-        <button id="add-btn" onclick="addTask()">መዝግብ</button>
+<div class="quiz-container" id="quiz">
+    <div id="question-part">
+        <h2 id="question">ጥያቄ እዚህ ጋር ይወጣል...</h2>
+        <div class="options" id="options-btn">
+            </div>
     </div>
-    <ul id="taskList"></ul>
+    <div id="result-part">
+        <p id="score-text"></p>
+        <button id="next-btn" onclick="nextQuestion()">ቀጣይ ጥያቄ</button>
+    </div>
 </div>
 
 <script>
-    const taskInput = document.getElementById("taskInput");
-    const taskList = document.getElementById("taskList");
+    const quizData = [
+        { q: "የኢትዮጵያ ዋና ከተማ ማን ናት?", a: "አዲስ አበባ", options: ["ጎንደር", "አዲስ አበባ", "ሐዋሳ", "ባህር ዳር"] },
+        { q: "ከሚከተሉት ውስጥ የፕሮግራም ቋንቋ የሆነው የቱ ነው?", a: "JavaScript", options: ["HTML", "JavaScript", "CSS", "Word"] },
+        { q: "የዓለም ረጅሙ ወንዝ ማን ይባላል?", a: "አባይ", options: ["አባይ", "አማዞን", "ሚሲሲፒ", "ኮንጎ"] }
+    ];
 
-    // አፑ ሲከፈት የተቀመጡ ስራዎችን አምጣ
-    document.addEventListener("DOMContentLoaded", getTasks);
+    let currentIdx = 0;
+    let score = 0;
 
-    function addTask() {
-        if (taskInput.value === "") return;
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options-btn");
+    const scoreText = document.getElementById("score-text");
+    const nextBtn = document.getElementById("next-btn");
+
+    function loadQuiz() {
+        const currentQuiz = quizData[currentIdx];
+        questionEl.innerText = currentQuiz.q;
+        optionsEl.innerHTML = "";
         
-        createTaskElement(taskInput.value);
-        saveLocalTasks(taskInput.value);
-        taskInput.value = "";
+        currentQuiz.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt, currentQuiz.a);
+            optionsEl.appendChild(btn);
+        });
     }
 
-    function createTaskElement(text) {
-        const li = document.createElement("li");
-        li.innerHTML = `<span>${text}</span> <span class="delete-btn" onclick="removeTask(this)">X</span>`;
-        li.onclick = function() { this.classList.toggle("completed"); };
-        taskList.appendChild(li);
+    function checkAnswer(selected, correct) {
+        if (selected === correct) {
+            score++;
+            alert("ትክክል ነህ! ✅");
+        } else {
+            alert("ተሳስተሃል! ❌ ትክክለኛው መልስ: " + correct);
+        }
+        
+        if (currentIdx < quizData.length - 1) {
+            nextBtn.style.display = "block";
+        } else {
+            showResult();
+        }
     }
 
-    function saveLocalTasks(task) {
-        let tasks = localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks")) : [];
-        tasks.push(task);
-        localStorage.setItem("tasks", JSON.stringify(tasks));
+    function nextQuestion() {
+        currentIdx++;
+        nextBtn.style.display = "none";
+        loadQuiz();
     }
 
-    function getTasks() {
-        let tasks = localStorage.getItem("tasks") ? JSON.parse(localStorage.getItem("tasks")) : [];
-        tasks.forEach(task => createTaskElement(task));
+    function showResult() {
+        document.getElementById("question-part").style.display = "none";
+        scoreText.innerText = `ውጤትህ፡ ${score} ከ ${quizData.length}`;
+        scoreText.style.display = "block";
+        nextBtn.innerText = "እንደገና ጀምር";
+        nextBtn.style.display = "block";
+        nextBtn.onclick = () => location.reload();
     }
 
-    function removeTask(btn) {
-        const taskItem = btn.parentElement;
-        const taskText = taskItem.querySelector("span").innerText;
-        let tasks = JSON.parse(localStorage.getItem("tasks"));
-        tasks = tasks.filter(t => t !== taskText);
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-        taskItem.remove();
-    }
+    loadQuiz();
 </script>
 
 </body>
