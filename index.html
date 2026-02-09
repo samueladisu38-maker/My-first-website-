@@ -6,101 +6,112 @@
     <title>Sami Movies - Pro</title>
     <style>
         body {
-            background-color: #080a10;
+            background-color: #0d0d0d;
             color: white;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 0;
         }
         header {
-            background: linear-gradient(to right, #e94560, #4e085f);
-            padding: 30px 10px;
+            background: #1a1a2e;
+            padding: 20px;
             text-align: center;
+            border-bottom: 3px solid #e94560;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
-        h1 { margin: 0; font-size: 28px; letter-spacing: 2px; }
-        .search-container { margin-top: 15px; }
-        #search {
-            width: 85%;
+        .search-box {
+            width: 90%;
             padding: 12px;
             border-radius: 25px;
             border: none;
+            margin-top: 10px;
             font-size: 16px;
-            outline: none;
         }
-        .container {
+        .movie-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* በሁለት ረድፍ እንዲሆን */
+            grid-template-columns: repeat(2, 1fr); /* ጎን ለጎን ሁለት እንዲሆኑ */
             gap: 15px;
             padding: 15px;
         }
-        .movie-card {
-            background-color: #16213e;
+        .card {
+            background: #16213e;
             border-radius: 15px;
             overflow: hidden;
-            border-bottom: 4px solid #e94560;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
         }
-        .movie-card img {
+        .card img {
             width: 100%;
-            height: 220px;
-            object-fit: cover;
+            height: 250px;
+            object-fit: cover; /* ፎቶው እንዳይለጠጥ */
             display: block;
         }
-        .info { padding: 10px; text-align: center; }
-        .info h3 { font-size: 14px; margin: 5px 0; height: 35px; overflow: hidden; }
-        .rating { color: #f1c40f; font-weight: bold; }
+        .info {
+            padding: 10px;
+            text-align: center;
+        }
+        .info h3 {
+            font-size: 14px;
+            margin: 5px 0;
+            color: #efefef;
+        }
+        .rate {
+            color: #f1c40f;
+            font-size: 13px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>SAMI MOVIES</h1>
-    <div class="search-container">
-        <input type="text" id="search" placeholder="ፊልም ይፈልጉ..." onkeyup="searchMovie()">
-    </div>
+    <h1 style="margin:0; color:#e94560;">SAMI MOVIES</h1>
+    <input type="text" class="search-box" id="myInput" onkeyup="myFunction()" placeholder="ፊልም ይፈልጉ...">
 </header>
 
-<div class="container" id="movieList">
-    <div class="movie-card">
-        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/u899S9v9vAs9p9UoXonY9X9X9pX.jpg" alt="Avatar">
-        <div class="info">
-            <h3>Avatar: The Way of Water</h3>
-            <span class="rating">⭐ 7.7</span>
-        </div>
-    </div>
-    <div class="movie-card">
-        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/h8f94pDnqO373fIscF9366N9N0r.jpg" alt="Batman">
+<div class="movie-grid" id="movieList">
+    <div class="card">
+        <img src="https://image.tmdb.org/t/p/w500/r2J0VvYnbuS3vzkv9uOQ8G9OfST.jpg" alt="Batman">
         <div class="info">
             <h3>The Batman</h3>
-            <span class="rating">⭐ 8.1</span>
+            <span class="rate">⭐ 8.1</span>
         </div>
     </div>
-    <div class="movie-card">
-        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/mY7pS7owm9L7ovm21nQ17yv4Yx5.jpg" alt="Fast X">
+    <div class="card">
+        <img src="https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvRIoY9I8.jpg" alt="Spider Man">
         <div class="info">
-            <h3>Fast X</h3>
-            <span class="rating">⭐ 7.2</span>
+            <h3>Spider-Man</h3>
+            <span class="rate">⭐ 8.4</span>
         </div>
     </div>
-    <div class="movie-card">
-        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/8GxvA9zDZ9GwpYozd2YCu1O1G9l.jpg" alt="Interstellar">
+    <div class="card">
+        <img src="https://image.tmdb.org/t/p/w500/8GxvA9zDZ9GwpYozd2YCu1O1G9l.jpg" alt="Interstellar">
         <div class="info">
             <h3>Interstellar</h3>
-            <span class="rating">⭐ 8.7</span>
+            <span class="rate">⭐ 8.7</span>
+        </div>
+    </div>
+    <div class="card">
+        <img src="https://image.tmdb.org/t/p/w500/x747vYbtGfsXrs9t99q9uUCDgx6.jpg" alt="Joker">
+        <div class="info">
+            <h3>Joker</h3>
+            <span class="rate">⭐ 8.5</span>
         </div>
     </div>
 </div>
 
 <script>
-    function searchMovie() {
-        let input = document.getElementById('search').value.toLowerCase();
-        let cards = document.getElementsByClassName('movie-card');
-        
-        for (let i = 0; i < cards.length; i++) {
-            let title = cards[i].getElementsByTagName('h3')[0].innerText.toLowerCase();
-            if (title.includes(input)) {
+    function myFunction() {
+        var input, filter, grid, cards, h3, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        grid = document.getElementById("movieList");
+        cards = grid.getElementsByClassName("card");
+        for (i = 0; i < cards.length; i++) {
+            h3 = cards[i].getElementsByTagName("h3")[0];
+            txtValue = h3.textContent || h3.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
                 cards[i].style.display = "";
             } else {
                 cards[i].style.display = "none";
