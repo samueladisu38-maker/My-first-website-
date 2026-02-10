@@ -3,52 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Entrance Prep - Multi-Subject</title>
+    <title>Sami Master Prep - Final</title>
     <style>
-        :root { --primary: #2563eb; --dark: #0f172a; --bg: #f8fafc; }
+        :root { --primary: #2563eb; --dark: #0f172a; --bg: #f1f5f9; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; color: var(--dark); }
-        header { background: var(--dark); color: white; padding: 25px; text-align: center; border-bottom: 5px solid var(--primary); }
+        header { background: var(--dark); color: white; padding: 20px; text-align: center; border-bottom: 5px solid var(--primary); }
         .container { max-width: 500px; margin: auto; padding: 15px; }
-        .card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 12px; cursor: pointer; border: 1px solid #e2e8f0; font-weight: 600; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
-        .card:hover { border-color: var(--primary); transform: translateY(-3px); background: #eff6ff; }
+        .card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 12px; cursor: pointer; border: 1px solid #e2e8f0; font-weight: 600; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .card:hover { border-color: var(--primary); transform: translateY(-2px); background: #eff6ff; }
         .quiz-box { display: none; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; background: white; text-align: left; cursor: pointer; font-size: 16px; transition: 0.2s; }
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; background: white; text-align: left; cursor: pointer; font-size: 16px; }
         .correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
         .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
         .hidden { display: none; }
-        .back-btn { background: none; border: none; color: var(--primary); cursor: pointer; font-weight: bold; margin-bottom: 15px; display: block; }
+        .back-btn { background: none; border: none; color: var(--primary); cursor: pointer; font-weight: bold; margin-bottom: 10px; }
+        #loading { display: none; text-align: center; color: var(--primary); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>SAMI ENTRANCE PREP</h1>
-    <p>Mathematics | Physics | Chemistry | Biology | English</p>
+    <p>All Subjects Connected</p>
 </header>
 
 <div class="container">
     <div id="subject-menu">
-        <h3 style="text-align: center;">Choose Your Subject</h3>
-        <div class="card" onclick="loadSubjectFile('math.json', 'Mathematics')">Mathematics <span>→</span></div>
-        <div class="card" onclick="loadSubjectFile('phys.json', 'Physics')">Physics <span>→</span></div>
-        <div class="card" onclick="loadSubjectFile('chem.json', 'Chemistry')">Chemistry <span>→</span></div>
-        <div class="card" onclick="loadSubjectFile('bio.json', 'Biology')">Biology <span>→</span></div>
-        <div class="card" onclick="loadSubjectFile('eng.json', 'English')">English <span>→</span></div>
+        <h3 style="text-align: center;">Select Subject</h3>
+        <div id="loading">Loading Questions... Please wait.</div>
+        <div class="card" onclick="connectToFile('Maths-', 'maths.json', 'Mathematics')">Mathematics <span>→</span></div>
+        <div class="card" onclick="connectToFile('Phys', 'phys.json', 'Physics')">Physics <span>→</span></div>
+        <div class="card" onclick="connectToFile('Chem', 'chem.json', 'Chemistry')">Chemistry <span>→</span></div>
+        <div class="card" onclick="connectToFile('Bio', 'bio.json', 'Biology')">Biology <span>→</span></div>
+        <div class="card" onclick="connectToFile('Eng', 'eng.json', 'English')">English <span>→</span></div>
     </div>
 
     <div id="grade-menu" class="hidden">
         <button class="back-btn" onclick="location.reload()">← Back to Subjects</button>
-        <h3 id="grade-title" style="text-align: center;">Choose Grade</h3>
-        <div class="card" onclick="startExam(9)">Grade 9</div>
-        <div class="card" onclick="startExam(10)">Grade 10</div>
-        <div class="card" onclick="startExam(11)">Grade 11</div>
-        <div class="card" onclick="startExam(12)">Grade 12</div>
+        <h3 id="grade-title" style="text-align: center;">Select Grade</h3>
+        <div class="card" onclick="startQuiz(9)">Grade 9</div>
+        <div class="card" onclick="startQuiz(10)">Grade 10</div>
+        <div class="card" onclick="startQuiz(11)">Grade 11</div>
+        <div class="card" onclick="startQuiz(12)">Grade 12</div>
     </div>
 
     <div id="quiz-section" class="quiz-box">
         <div style="display:flex; justify-content:space-between; color:var(--primary); font-weight:bold; margin-bottom:15px;">
-            <span id="current-info">Subject - G12</span>
-            <span id="progress-text">1/10</span>
+            <span id="current-info"></span>
+            <span id="progress-text"></span>
         </div>
         <p id="q-text" style="font-size:18px; font-weight:bold; line-height:1.4;"></p>
         <div id="opt-container"></div>
@@ -56,102 +58,95 @@
 
     <div id="result-page" class="quiz-box" style="text-align:center;">
         <h2>Quiz Completed!</h2>
-        <p>Your Final Score:</p>
-        <h1 id="final-score" style="font-size:55px; color:var(--primary);">0/10</h1>
-        <button class="card" style="width:100%; justify-content:center; background:var(--primary); color:white; border:none;" onclick="location.reload()">Back to Main Menu</button>
+        <h1 id="final-score" style="font-size:50px; color:var(--primary);"></h1>
+        <button class="card" style="width:100%; justify-content:center; background:var(--primary); color:white; border:none;" onclick="location.reload()">Try Another Subject</button>
     </div>
 </div>
 
 <script>
-    let db = {}; // All questions from the JSON file will be stored here
-    let currentSubName = "";
-    let currentGrade = "";
-    let idx = 0;
-    let score = 0;
+    let db = {}; 
+    let activeSub = "";
+    let activeGrade = "";
+    let qIdx = 0;
+    let userScore = 0;
 
-    // This function connects the index.html to your JSON files
-    function loadSubjectFile(fileName, subDisplayName) {
-        currentSubName = subDisplayName;
+    // GitHub Username
+    const user = "samueladisu38-maker";
+
+    function connectToFile(repoName, fileName, subLabel) {
+        document.getElementById("loading").style.display = "block";
+        activeSub = subLabel;
         
-        // Fetching the file from your GitHub repository
-        fetch(fileName)
-            .then(response => {
-                if (!response.ok) throw new Error("File not found");
-                return response.json();
+        // GitHub Raw Link Generator
+        const rawUrl = `https://raw.githubusercontent.com/${user}/${repoName}/main/${fileName}`;
+
+        fetch(rawUrl)
+            .then(res => {
+                if(!res.ok) throw new Error();
+                return res.json();
             })
             .then(data => {
-                db = data; // Data successfully loaded from math.json, phys.json, etc.
+                db = data;
+                document.getElementById("loading").style.display = "none";
                 document.getElementById("subject-menu").classList.add("hidden");
                 document.getElementById("grade-menu").classList.remove("hidden");
-                document.getElementById("grade-title").innerText = subDisplayName + ": Select Grade";
+                document.getElementById("grade-title").innerText = subLabel + ": Choose Grade";
             })
-            .catch(error => {
-                alert("The file '" + fileName + "' is missing or empty! Please check your GitHub.");
-                console.error(error);
+            .catch(err => {
+                document.getElementById("loading").style.display = "none";
+                alert(`Error: Could not find ${fileName} in your ${repoName} repository!`);
             });
     }
 
-    function startExam(g) {
-        currentGrade = g.toString();
-        // Check if the grade has questions
-        if (!db[currentGrade] || db[currentGrade].length === 0) {
-            alert("No questions found for Grade " + g + " in this file.");
+    function startQuiz(g) {
+        activeGrade = g.toString();
+        if (!db[activeGrade] || db[activeGrade].length === 0) {
+            alert("No questions found for Grade " + g);
             return;
         }
-        
         document.getElementById("grade-menu").classList.add("hidden");
         document.getElementById("quiz-section").style.display = "block";
-        loadQuestion();
+        renderQ();
     }
 
-    function loadQuestion() {
-        const qList = db[currentGrade];
-        const data = qList[idx];
-        
-        document.getElementById("current-info").innerText = `${currentSubName} - G${currentGrade}`;
-        document.getElementById("progress-text").innerText = `${idx + 1}/${qList.length}`;
-        document.getElementById("q-text").innerText = data.q;
+    function renderQ() {
+        const qData = db[activeGrade][qIdx];
+        document.getElementById("current-info").innerText = `${activeSub} - G${activeGrade}`;
+        document.getElementById("progress-text").innerText = `${qIdx + 1}/${db[activeGrade].length}`;
+        document.getElementById("q-text").innerText = qData.q;
         
         const container = document.getElementById("opt-container");
         container.innerHTML = "";
         
-        data.opt.forEach(o => {
+        qData.opt.forEach(o => {
             const btn = document.createElement("button");
             btn.className = "option";
             btn.innerText = o;
-            btn.onclick = () => checkAnswer(btn, o, data.a);
+            btn.onclick = () => {
+                const all = document.querySelectorAll(".option");
+                all.forEach(b => b.disabled = true);
+                if(o === qData.a) {
+                    userScore++;
+                    btn.classList.add("correct");
+                } else {
+                    btn.classList.add("wrong");
+                    all.forEach(b => { if(b.innerText === qData.a) b.classList.add("correct"); });
+                }
+                setTimeout(() => {
+                    qIdx++;
+                    if(qIdx < db[activeGrade].length) renderQ();
+                    else finish();
+                }, 1200);
+            };
             container.appendChild(btn);
         });
     }
 
-    function checkAnswer(btn, selected, correct) {
-        const allButtons = document.querySelectorAll(".option");
-        allButtons.forEach(b => b.disabled = true); // Disable after selection
-
-        if (selected === correct) {
-            score++;
-            btn.classList.add("correct");
-        } else {
-            btn.classList.add("wrong");
-            // Show the correct answer
-            allButtons.forEach(b => { if(b.innerText === correct) b.classList.add("correct"); });
-        }
-
-        setTimeout(() => {
-            idx++;
-            if (idx < db[currentGrade].length) {
-                loadQuestion();
-            } else {
-                showFinalResult();
-            }
-        }, 1200);
-    }
-
-    function showFinalResult() {
+    function finish() {
         document.getElementById("quiz-section").style.display = "none";
         document.getElementById("result-page").style.display = "block";
-        document.getElementById("final-score").innerText = `${score} / ${db[currentGrade].length}`;
+        document.getElementById("final-score").innerText = `${userScore} / ${db[activeGrade].length}`;
     }
 </script>
 </body>
-                </html>
+            </html>
