@@ -3,20 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Prep - Notes & Quiz</title>
+    <title>Sami Master Prep - Final Edition</title>
     <style>
-        :root { --main: #1e293b; --accent: #6366f1; --bg: #f1f5f9; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
-        header { background: var(--main); color: white; padding: 30px; text-align: center; border-bottom: 5px solid var(--accent); }
-        .container { width: 90%; max-width: 600px; margin: 20px auto; }
-        .card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; cursor: pointer; border-left: 8px solid var(--accent); box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-weight: bold; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); background: #f8fafc; }
+        :root {
+            --math: #6366f1; --phys: #f59e0b; --chem: #10b981; 
+            --bio: #ec4899; --eng: #8b5cf6; --dark: #0f172a; --bg: #f1f5f9;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; color: #334155; }
+        header { background: var(--dark); color: white; padding: 40px 20px; text-align: center; border-bottom: 5px solid var(--math); }
+        .container { width: 92%; max-width: 800px; margin: 20px auto; }
+        
+        /* Menu Cards */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .card { background: white; padding: 20px; border-radius: 15px; cursor: pointer; text-align: center; font-weight: bold; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: 0.3s; border-bottom: 5px solid #ddd; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        
+        .m-math { border-color: var(--math); color: var(--math); }
+        .m-phys { border-color: var(--phys); color: var(--phys); }
+        .m-chem { border-color: var(--chem); color: var(--chem); }
+        .m-bio { border-color: var(--bio); color: var(--bio); }
+        .m-eng { border-color: var(--eng); color: var(--eng); }
+
+        /* Content Sections */
+        .content-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; }
+        .note-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
+        .btn-back { background: var(--dark); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; }
+        
         .hidden { display: none; }
-        .note-content { background: white; padding: 25px; border-radius: 20px; line-height: 1.6; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .note-content h2 { color: var(--accent); }
-        .btn { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; cursor: pointer; margin-top: 15px; font-weight: bold; }
-        .quiz-box { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #ddd; border-radius: 8px; background: white; text-align: left; cursor: pointer; }
+        h2 { margin: 0; }
+        h3 { color: var(--dark); background: #f8fafc; padding: 10px; border-radius: 5px; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 12px; line-height: 1.6; }
+        .formula { background: #fff7ed; padding: 5px 10px; border-radius: 4px; font-weight: bold; color: #c2410c; border: 1px dashed #fdba74; }
+
+        /* Quiz Style */
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 10px; background: white; text-align: left; cursor: pointer; font-size: 16px; transition: 0.2s; }
         .correct { background: #dcfce7 !important; border-color: #22c55e !important; }
         .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; }
     </style>
@@ -24,261 +45,185 @@
 <body>
 
 <header>
-    <h1>SAMI PREP 2.0</h1>
-    <p>Short Notes & Entrance Questions</p>
+    <h1>SAMI PREP MASTER</h1>
+    <p>Grade 9-12 All-in-One Summary</p>
 </header>
 
 <div class="container">
     <div id="main-menu">
-        <div class="card" onclick="showSection('notes-menu')">📖 Read Short Notes (9-12)</div>
-        <div class="card" onclick="showSection('subject-menu')" style="border-left-color: #f59e0b;">✍️ Take Practice Quiz</div>
+        <h2 style="text-align: center; margin-bottom: 20px;">Select a Subject</h2>
+        <div class="grid">
+            <div class="card m-math" onclick="showSub('math')">MATHEMATICS<br>📘</div>
+            <div class="card m-phys" onclick="showSub('phys')">PHYSICS<br>🚀</div>
+            <div class="card m-chem" onclick="showSub('chem')">CHEMISTRY<br>🧪</div>
+            <div class="card m-bio" onclick="showSub('bio')">BIOLOGY<br>🌿</div>
+            <div class="card m-eng" onclick="showSub('eng')">ENGLISH<br>✍️</div>
+        </div>
     </div>
 
-    <div id="notes-menu" class="hidden">
-        <button class="btn" onclick="goBack()">← Back</button>
-        <h2 style="text-align: center;">Select Subject for Notes</h2>
-        <div class="card" onclick="showNote('math')">Mathematics Notes</div>
-        <div class="card" onclick="showNote('phys')">Physics Notes</div>
-        <div class="card" onclick="showNote('bio')">Biology Notes</div>
-    </div>
+    <div id="content-viewer" class="content-box">
+        <div class="note-header">
+            <h2 id="title">Subject</h2>
+            <button class="btn-back" onclick="goHome()">Back Home</button>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="btn-back" style="flex:1; background: #64748b;" onclick="toggleView('notes')">Read Notes</button>
+            <button class="btn-back" style="flex:1; background: #64748b;" onclick="toggleView('quiz')">Take Quiz</button>
+        </div>
 
-    <div id="note-viewer" class="hidden">
-        <div class="note-content" id="note-body"></div>
-        <button class="btn" onclick="showSection('notes-menu')">Close Notes</button>
-    </div>
+        <div id="notes-view">
+            <div id="notes-text"></div>
+        </div>
 
-    <div id="subject-menu" class="hidden">
-        <button class="btn" onclick="goBack()">← Back</button>
-        <h2 style="text-align: center;">Select Subject for Quiz</h2>
-        <div class="card" onclick="startQuiz('math')">Math Quiz</div>
-        <div class="card" onclick="startQuiz('phys')">Physics Quiz</div>
-    </div>
-
-    <div id="quiz-box" class="quiz-box hidden">
-        <div id="q-text" style="font-size: 18px; font-weight: bold;"></div>
-        <div id="options"></div>
+        <div id="quiz-view" class="hidden">
+            <div id="q-text" style="font-size: 18px; font-weight: bold; margin-bottom: 20px;"></div>
+            <div id="options-area"></div>
+        </div>
     </div>
 </div>
 
 <script>
-    const notesData = {
-        math: `
-            <h2>Mathematics Summary</h2>
-            <p><b>1. Derivatives:</b> The derivative of x^n is n*x^(n-1). This is crucial for entrance exams.</p>
-            <p><b>2. Limits:</b> Remember that sin(x)/x as x approaches 0 is always 1.</p>
-            <p><b>3. Matrices:</b> To find the determinant of a 2x2 matrix [a,b; c,d], use (ad - bc).</p>
-        `,
-        phys: `
-            <h2>Physics Summary</h2>
-            <p><b>1. Newton's 2nd Law:</b> F = ma. Force equals mass times acceleration.</p>
-            <p><b>2. Work-Energy:</b> Work is the change in Kinetic Energy (KE).</p>
-            <p><b>3. Waves:</b> Speed of light (c) = 3 x 10^8 m/s. Sound cannot travel in a vacuum.</p>
-        `,
-        bio: `
-            <h2>Biology Summary</h2>
-            <p><b>1. Cell Theory:</b> All living things are made of cells. Mitochondria is the powerhouse.</p>
-            <p><b>2. Genetics:</b> Mendel is the father of genetics. DNA is a double helix.</p>
-        `
+    const data = {
+        math: {
+            notes: `
+                <h3>Grade 9-10: Foundations</h3>
+                <ul>
+                    <li><b>Quadratic Equation:</b> $ax^2 + bx + c = 0$. Solution: <span class="formula">x = [-b ± √(b²-4ac)] / 2a</span></li>
+                    <li><b>Trigonometry:</b> $\\sin^2\\theta + \\cos^2\\theta = 1$. Remember SOH-CAH-TOA for right triangles.</li>
+                </ul>
+                <h3>Grade 11-12: Advanced</h3>
+                <ul>
+                    <li><b>Limits:</b> $\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$.</li>
+                    <li><b>Derivatives:</b> $\\frac{d}{dx}(x^n) = nx^{n-1}$. Derivative of $\\sin x = \\cos x$.</li>
+                    <li><b>Integration:</b> $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$.</li>
+                </ul>`,
+            quiz: [
+                {q: "What is the derivative of x² + 5x?", a: "2x + 5", opt: ["2x", "2x + 5", "x + 5", "5"]},
+                {q: "Value of log10(1000)?", a: "3", opt: ["2", "3", "10", "100"]}
+            ]
+        },
+        phys: {
+            notes: `
+                <h3>Grade 9-10: Motion & Energy</h3>
+                <ul>
+                    <li><b>Newton's 2nd Law:</b> <span class="formula">F = ma</span>. (Force = mass × acceleration).</li>
+                    <li><b>Work:</b> $W = Fd \\cos \\theta$. Unit is Joule (J).</li>
+                </ul>
+                <h3>Grade 11-12: Fields & Quantum</h3>
+                <ul>
+                    <li><b>Electromagnetism:</b> $V = IR$ (Ohm's Law). $P = IV$ (Power).</li>
+                    <li><b>Modern Physics:</b> $E = hf$ (Energy of photon). $E = mc^2$ (Einstein's relation).</li>
+                </ul>`,
+            quiz: [
+                {q: "Unit of Magnetic Flux?", a: "Weber", opt: ["Tesla", "Weber", "Henry", "Farad"]},
+                {q: "Speed of light in vacuum?", a: "3x10^8 m/s", opt: ["3x10^6", "3x10^8 m/s", "1000", "Inf"]}
+            ]
+        },
+        chem: {
+            notes: `
+                <h3>Grade 9-10: Atoms & Bonds</h3>
+                <ul>
+                    <li><b>Mole Concept:</b> 1 mole = $6.022 \\times 10^{23}$ particles (Avogadro's number).</li>
+                    <li><b>Bonds:</b> Ionic (transfer of e-), Covalent (sharing of e-).</li>
+                </ul>
+                <h3>Grade 11-12: Kinetics & Equilibrium</h3>
+                <ul>
+                    <li><b>pH Scale:</b> $\\text{pH} = -\\log[H^+]$. Acid < 7, Base > 7.</li>
+                    <li><b>Ideal Gas Law:</b> <span class="formula">PV = nRT</span>.</li>
+                </ul>`,
+            quiz: [
+                {q: "Functional group of Alcohol?", a: "-OH", opt: ["-CHO", "-OH", "-COOH", "-NH2"]},
+                {q: "Strongest Acid pH?", a: "1", opt: ["1", "7", "10", "14"]}
+            ]
+        },
+        bio: {
+            notes: `
+                <h3>Grade 9-10: Cells & Diversity</h3>
+                <ul>
+                    <li><b>Cell:</b> Mitochondria is the "Powerhouse" (ATP production).</li>
+                    <li><b>Genetics:</b> Phenotype (physical trait), Genotype (genetic makeup).</li>
+                </ul>
+                <h3>Grade 11-12: Systems & Evolution</h3>
+                <ul>
+                    <li><b>DNA:</b> Double helix structure. Bases: A-T, G-C.</li>
+                    <li><b>Homeostasis:</b> Maintenance of constant internal environment.</li>
+                </ul>`,
+            quiz: [
+                {q: "Where does Photosynthesis occur?", a: "Chloroplast", opt: ["Nucleus", "Chloroplast", "Cell Wall", "Vacuole"]},
+                {q: "Chromosomes in humans?", a: "46", opt: ["23", "46", "48", "30"]}
+            ]
+        },
+        eng: {
+            notes: `
+                <h3>Grade 9-12: Grammar & Writing</h3>
+                <ul>
+                    <li><b>Tenses:</b> Present Perfect (has/have + V3), Past Perfect (had + V3).</li>
+                    <li><b>Conditionals:</b> Type 1 (If + Present, Will + V1). Type 2 (If + Past, Would + V1).</li>
+                    <li><b>Active/Passive:</b> Focus on the receiver of the action.</li>
+                </ul>`,
+            quiz: [
+                {q: "If I ___ rich, I would buy a car.", a: "were", opt: ["am", "was", "were", "be"]},
+                {q: "She has ___ the book.", a: "written", opt: ["write", "wrote", "written", "writes"]}
+            ]
+        }
     };
 
-    const quizData = {
-        math: [{q: "Derivative of x³?", a: "3x²", opt: ["x²", "3x²", "3x", "2x"]}],
-        phys: [{q: "Unit of Force?", a: "Newton", opt: ["Joule", "Newton", "Watt", "Volt"]}]
-    };
+    let currentSub = "";
+    let qIdx = 0;
 
-    function showSection(id) {
-        document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
+    function showSub(s) {
+        currentSub = s;
+        document.getElementById('main-menu').classList.add('hidden');
+        document.getElementById('content-viewer').style.display = 'block';
+        document.getElementById('title').innerText = s.toUpperCase();
+        document.getElementById('notes-text').innerHTML = data[s].notes;
+        toggleView('notes');
     }
 
-    function showNote(sub) {
-        document.getElementById('note-body').innerHTML = notesData[sub];
-        showSection('note-viewer');
+    function toggleView(view) {
+        if(view === 'notes') {
+            document.getElementById('notes-view').classList.remove('hidden');
+            document.getElementById('quiz-view').classList.add('hidden');
+        } else {
+            document.getElementById('notes-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.remove('hidden');
+            startQuiz();
+        }
     }
 
-    function goBack() { showSection('main-menu'); }
-
-    let currentQ = [];
-    let idx = 0;
-
-    function startQuiz(sub) {
-        currentQ = quizData[sub];
-        idx = 0;
-        showSection('quiz-box');
-        displayQ();
+    function startQuiz() {
+        qIdx = 0;
+        loadQ();
     }
 
-    function displayQ() {
-        const d = currentQ[idx];
-        document.getElementById('q-text').innerText = d.q;
-        const optDiv = document.getElementById('options');
-        optDiv.innerHTML = "";
-        d.opt.forEach(o => {
-            const btn = document.createElement("button");
-            btn.className = "option";
-            btn.innerText = o;
-            btn.onclick = () => {
-                if(o === d.a) btn.classList.add('correct');
-                else btn.classList.add('wrong');
-                setTimeout(() => { alert("Next version will have more questions!"); goBack(); }, 1000);
+    function loadQ() {
+        const qData = data[currentSub].quiz[qIdx];
+        if(!qData) {
+            alert("Quiz Completed!");
+            toggleView('notes');
+            return;
+        }
+        document.getElementById('q-text').innerText = qData.q;
+        const area = document.getElementById('options-area');
+        area.innerHTML = "";
+        qData.opt.forEach(o => {
+            const b = document.createElement("button");
+            b.className = "option";
+            b.innerText = o;
+            b.onclick = () => {
+                if(o === qData.a) b.classList.add('correct');
+                else b.classList.add('wrong');
+                setTimeout(() => { qIdx++; loadQ(); }, 1000);
             };
-            optDiv.appendChild(btn);
+            area.appendChild(b);
         });
     }
-</script>
-</body>
-            </html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Entrance Prep - Final</title>
-    <style>
-        :root { --main: #1e293b; --accent: #6366f1; --bg: #f8fafc; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; }
-        header { background: var(--main); color: white; width: 100%; padding: 25px 0; text-align: center; border-bottom: 5px solid var(--accent); }
-        .container { width: 90%; max-width: 500px; margin-top: 20px; }
-        .card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border-left: 6px solid var(--accent); box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-weight: bold; transition: 0.3s; display: flex; justify-content: space-between; }
-        .card:hover { transform: scale(1.02); background: #f1f5f9; }
-        .hidden { display: none; }
-        .quiz-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; }
-        .option { display: block; width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 10px; background: white; cursor: pointer; text-align: left; font-size: 16px; }
-        .correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
-        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
-        .btn { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; cursor: pointer; margin-top: 15px; font-weight: bold; }
-    </style>
-</head>
-<body>
 
-<header>
-    <h1>SAMI ENTRANCE PREP</h1>
-    <p>Grade 9-12 Master Practice</p>
-</header>
-
-<div class="container">
-    <div id="subject-menu">
-        <h2 style="text-align: center;">Choose Subject</h2>
-        <div class="card" onclick="pickSub('math')">Mathematics 📘</div>
-        <div class="card" onclick="pickSub('phys')">Physics 🚀</div>
-        <div class="card" onclick="pickSub('chem')">Chemistry 🧪</div>
-        <div class="card" onclick="pickSub('bio')">Biology 🌿</div>
-        <div class="card" onclick="pickSub('eng')">English ✍️</div>
-    </div>
-
-    <div id="grade-menu" class="hidden">
-        <h2 id="grade-title" style="text-align: center;">Select Grade</h2>
-        <div class="card" onclick="start(9)">Grade 9</div>
-        <div class="card" onclick="start(10)">Grade 10</div>
-        <div class="card" onclick="start(11)">Grade 11</div>
-        <div class="card" onclick="start(12)">Grade 12 (Entrance)</div>
-        <button class="btn" onclick="location.reload()">Back</button>
-    </div>
-
-    <div id="quiz-box" class="quiz-box hidden">
-        <div id="status" style="color: var(--accent); font-weight: bold; margin-bottom: 10px;"></div>
-        <div id="q-text" style="font-size: 18px; font-weight: bold; margin-bottom: 15px;"></div>
-        <div id="options"></div>
-    </div>
-
-    <div id="result-box" class="quiz-box hidden" style="text-align: center;">
-        <h2>Score Summary</h2>
-        <div id="final-score" style="font-size: 50px; color: var(--accent); font-weight: bold;"></div>
-        <p id="msg"></p>
-        <button class="btn" onclick="location.reload()">Restart</button>
-    </div>
-</div>
-
-<script>
-const db = {
-    math: {
-        12: [
-            {q: "What is the derivative of f(x) = ln(sin x)?", a: "cot x", opt: ["tan x", "cot x", "1/sin x", "cos x"]},
-            {q: "The limit of (sin x)/x as x approaches 0 is:", a: "1", opt: ["0", "1", "undefined", "inf"]},
-            {q: "Find the slope of the line tangent to y = x² at x=3.", a: "6", opt: ["3", "6", "9", "2"]},
-            {q: "Which of the following is a unit vector?", a: "(0, 1)", opt: ["(1, 1)", "(0, 1)", "(2, 0)", "(1, 2)"]},
-            {q: "∫ e^x dx is equal to:", a: "e^x + c", opt: ["e^x + c", "xe^x", "ln x", "1/e^x"]},
-            {q: "Solve for x: log(x) + log(2) = log(10)", a: "5", opt: ["2", "5", "8", "20"]},
-            {q: "The period of y = sin(2x) is:", a: "π", opt: ["2π", "π", "π/2", "4π"]},
-            {q: "Find the distance between (0,0) and (3,4).", a: "5", opt: ["7", "5", "12", "25"]},
-            {q: "If A is a 2x2 matrix and |A|=5, then |2A| is:", a: "20", opt: ["10", "20", "5", "25"]},
-            {q: "The sum of the infinite series 1 + 1/2 + 1/4 + ... is:", a: "2", opt: ["1.5", "2", "3", "infinity"]}
-        ]
-    },
-    phys: {
-        12: [
-            {q: "The rate of change of momentum is equal to:", a: "Force", opt: ["Work", "Power", "Force", "Impulse"]},
-            {q: "Unit of Magnetic Flux density (B):", a: "Tesla", opt: ["Weber", "Tesla", "Henry", "Farad"]},
-            {q: "A car accelerates from 0 to 20m/s in 4s. Acceleration?", a: "5 m/s²", opt: ["80", "5 m/s²", "10", "4"]},
-            {q: "Energy of a photon is given by:", a: "hf", opt: ["mc²", "hf", "1/2mv²", "mgh"]},
-            {q: "The color of light with the longest wavelength is:", a: "Red", opt: ["Blue", "Violet", "Green", "Red"]},
-            {q: "Ohm's law is represented by:", a: "V = IR", opt: ["P = IV", "V = IR", "F = ma", "W = Fd"]},
-            {q: "Capacitance is measured in:", a: "Farads", opt: ["Ohms", "Farads", "Volts", "Henrys"]},
-            {q: "Escape velocity on Earth is approx:", a: "11.2 km/s", opt: ["9.8 km/s", "11.2 km/s", "3x10^8", "5"]},
-            {q: "Sound waves cannot travel through:", a: "Vacuum", opt: ["Water", "Air", "Steel", "Vacuum"]},
-            {q: "The center of gravity of a uniform ring is at:", a: "Its center", opt: ["The edge", "Its center", "Anywhere", "Outside"]}
-        ]
+    function goHome() {
+        document.getElementById('main-menu').classList.remove('hidden');
+        document.getElementById('content-viewer').style.display = 'none';
     }
-};
-
-// Generic Questions for other grades
-const gen = [
-    {q: "Which of the following is a prime number?", a: "17", opt: ["15", "17", "21", "9"]},
-    {q: "Chemical symbol for Sodium?", a: "Na", opt: ["S", "So", "Na", "Ni"]},
-    {q: "The powerhouse of the cell is:", a: "Mitochondria", opt: ["Nucleus", "Ribosome", "Mitochondria", "Wall"]},
-    {q: "The past tense of 'Drink' is:", a: "Drank", opt: ["Drinked", "Drunk", "Drank", "Drinks"]},
-    {q: "What is 20% of 50?", a: "10", opt: ["5", "10", "15", "20"]},
-    {q: "Who is the father of Genetics?", a: "Mendel", opt: ["Darwin", "Mendel", "Newton", "Einstein"]},
-    {q: "Smallest unit of life?", a: "Cell", opt: ["Atom", "Cell", "Tissue", "Organ"]},
-    {q: "Opposite of 'Success'?", a: "Failure", opt: ["Win", "Failure", "Victory", "Gain"]},
-    {q: "Which gas do plants absorb?", a: "CO2", opt: ["Oxygen", "Nitrogen", "CO2", "Argon"]},
-    {q: "Sum of angles in a square?", a: "360", opt: ["180", "90", "360", "270"]}
-];
-
-let s="", g=0, idx=0, sc=0, qs=[];
-
-function pickSub(sub) {
-    s = sub;
-    document.getElementById("subject-menu").classList.add("hidden");
-    document.getElementById("grade-menu").classList.remove("hidden");
-}
-
-function start(gr) {
-    g = gr;
-    qs = (db[s] && db[s][g]) ? db[s][g] : gen;
-    idx=0; sc=0;
-    document.getElementById("grade-menu").classList.add("hidden");
-    document.getElementById("quiz-box").classList.remove("hidden");
-    show();
-}
-
-function show() {
-    if(idx >= qs.length) return end();
-    const d = qs[idx];
-    document.getElementById("status").innerText = `Question ${idx+1}/${qs.length}`;
-    document.getElementById("q-text").innerText = d.q;
-    const div = document.getElementById("options");
-    div.innerHTML = "";
-    d.opt.forEach(o => {
-        const b = document.createElement("button");
-        b.className = "option";
-        b.innerText = o;
-        b.onclick = () => {
-            const all = document.querySelectorAll(".option");
-            all.forEach(x => x.disabled = true);
-            if(o === d.a) { sc++; b.classList.add("correct"); }
-            else { b.classList.add("wrong"); all.forEach(x => {if(x.innerText===d.a) x.classList.add("correct");}); }
-            setTimeout(() => { idx++; show(); }, 1000);
-        };
-        div.appendChild(b);
-    });
-}
-
-function end() {
-    document.getElementById("quiz-box").classList.add("hidden");
-    document.getElementById("result-box").classList.remove("hidden");
-    document.getElementById("final-score").innerText = `${sc}/${qs.length}`;
-    document.getElementById("msg").innerText = sc > 7 ? "Excellent! You are ready! 🔥" : "Keep practicing! 📚";
-}
 </script>
 </body>
-    </html>
+</html>
