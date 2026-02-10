@@ -3,141 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami High-Level Prep</title>
+    <title>Sami Entrance Prep - Final</title>
     <style>
-        :root { --main: #1e1b4b; --accent: #4f46e5; --bg: #f1f5f9; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; }
-        header { background: var(--main); color: white; width: 100%; padding: 30px 0; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        :root { --main: #1e293b; --accent: #6366f1; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; }
+        header { background: var(--main); color: white; width: 100%; padding: 25px 0; text-align: center; border-bottom: 5px solid var(--accent); }
         .container { width: 90%; max-width: 500px; margin-top: 20px; }
-        .card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 12px; cursor: pointer; border-left: 8px solid var(--accent); box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-weight: bold; display: flex; justify-content: space-between; transition: 0.3s; }
-        .card:hover { transform: translateX(10px); background: #eef2ff; }
+        .card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border-left: 6px solid var(--accent); box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-weight: bold; transition: 0.3s; display: flex; justify-content: space-between; }
+        .card:hover { transform: scale(1.02); background: #f1f5f9; }
         .hidden { display: none; }
         .quiz-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; }
-        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 10px; background: white; cursor: pointer; text-align: left; font-size: 16px; font-weight: 500; }
-        .option:hover { border-color: var(--accent); }
+        .option { display: block; width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 10px; background: white; cursor: pointer; text-align: left; font-size: 16px; }
         .correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
         .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
-        .btn-home { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; cursor: pointer; margin-top: 20px; }
+        .btn { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; cursor: pointer; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>SAMI ENTRANCE EXAM PREP</h1>
-    <p>Advanced Grade 9-12 Practice</p>
+    <h1>SAMI ENTRANCE PREP</h1>
+    <p>Grade 9-12 Master Practice</p>
 </header>
 
 <div class="container">
     <div id="subject-menu">
-        <h2 style="text-align: center;">Select Subject</h2>
-        <div class="card" onclick="pickSubject('math')">Mathematics 📘</div>
-        <div class="card" onclick="pickSubject('phys')">Physics 🚀</div>
-        <div class="card" onclick="pickSubject('chem')">Chemistry 🧪</div>
-        <div class="card" onclick="pickSubject('bio')">Biology 🌿</div>
-        <div class="card" onclick="pickSubject('eng')">English ✍️</div>
+        <h2 style="text-align: center;">Choose Subject</h2>
+        <div class="card" onclick="pickSub('math')">Mathematics 📘</div>
+        <div class="card" onclick="pickSub('phys')">Physics 🚀</div>
+        <div class="card" onclick="pickSub('chem')">Chemistry 🧪</div>
+        <div class="card" onclick="pickSub('bio')">Biology 🌿</div>
+        <div class="card" onclick="pickSub('eng')">English ✍️</div>
     </div>
 
     <div id="grade-menu" class="hidden">
         <h2 id="grade-title" style="text-align: center;">Select Grade</h2>
-        <div class="card" onclick="startQuiz(9)">Grade 9</div>
-        <div class="card" onclick="startQuiz(10)">Grade 10</div>
-        <div class="card" onclick="startQuiz(11)">Grade 11</div>
-        <div class="card" onclick="startQuiz(12)">Grade 12 (Entrance)</div>
-        <button class="btn-home" onclick="location.reload()">Back</button>
+        <div class="card" onclick="start(9)">Grade 9</div>
+        <div class="card" onclick="start(10)">Grade 10</div>
+        <div class="card" onclick="start(11)">Grade 11</div>
+        <div class="card" onclick="start(12)">Grade 12 (Entrance)</div>
+        <button class="btn" onclick="location.reload()">Back</button>
     </div>
 
     <div id="quiz-box" class="quiz-box hidden">
-        <div id="status" style="font-weight: bold; color: var(--accent); margin-bottom: 10px;"></div>
-        <div id="q-text" style="font-size: 18px; font-weight: bold; margin-bottom: 20px;"></div>
-        <div id="option-list"></div>
+        <div id="status" style="color: var(--accent); font-weight: bold; margin-bottom: 10px;"></div>
+        <div id="q-text" style="font-size: 18px; font-weight: bold; margin-bottom: 15px;"></div>
+        <div id="options"></div>
     </div>
 
     <div id="result-box" class="quiz-box hidden" style="text-align: center;">
-        <h2>Exam Finished!</h2>
+        <h2>Score Summary</h2>
         <div id="final-score" style="font-size: 50px; color: var(--accent); font-weight: bold;"></div>
-        <p id="feedback"></p>
-        <button class="btn-home" onclick="location.reload()">Try Another Grade</button>
+        <p id="msg"></p>
+        <button class="btn" onclick="location.reload()">Restart</button>
     </div>
 </div>
 
 <script>
-    const database = {
-        math: {
-            12: [
-                {q: "What is the derivative of f(x) = sin(x²)?", a: "2x cos(x²)", opt: ["cos(x²)", "2x cos(x²)", "-2x cos(x²)", "2 sin(x)"]},
-                {q: "Find the limit as x -> 0 of sin(x)/x.", a: "1", opt: ["0", "1", "undefined", "infinity"]},
-                {q: "The dot product of (2,3) and (4,-1) is:", a: "5", opt: ["11", "5", "8", "-3"]},
-                {q: "Solve for x: e^(2x) = 5", a: "ln(5)/2", opt: ["ln(5)/2", "ln(2.5)", "2 ln(5)", "e^2.5"]}
-            ],
-            11: [
-                {q: "The value of log3(81) is:", a: "4", opt: ["3", "4", "9", "27"]},
-                {q: "Find the slope of 3x - 4y = 12", a: "0.75", opt: ["3", "-4", "0.75", "1.33"]}
-            ]
-        },
-        phys: {
-            12: [
-                {q: "The work-energy theorem states Work = ___.", a: "ΔKE", opt: ["ΔPE", "ΔKE", "mgh", "1/2mv"]},
-                {q: "Heisenberg's Uncertainty Principle deals with:", a: "Position & Momentum", opt: ["Mass & Speed", "Position & Momentum", "Time & Energy", "Heat"]}
-            ]
-        }
-        // ... more subjects and grades follow the same pattern
-    };
-
-    // Fallback for empty grades
-    const hardDefault = [
-        {q: "Advanced: Find the value of ∫ 2x dx from 0 to 2.", a: "4", opt: ["2", "4", "8", "1"]},
-        {q: "Chemistry: Which has the highest ionization energy?", a: "Fluorine", opt: ["Oxygen", "Fluorine", "Neon", "Helium"]},
-        {q: "Physics: Unit of Magnetic Induction?", a: "Tesla", opt: ["Weber", "Tesla", "Henry", "Farad"]},
-        {q: "Biology: Which hormone regulates blood sugar?", a: "Insulin", opt: ["Adrenaline", "Insulin", "Estrogen", "Thyroxine"]},
-        {q: "English: Choose the complex sentence:", a: "Although it rained, we went.", opt: ["It rained and we stayed.", "He is tall.", "Although it rained, we went.", "I like tea."]}
-    ];
-
-    let sub = "", grade = "", qIdx = 0, score = 0, currentQs = [];
-
-    function pickSubject(s) {
-        sub = s;
-        document.getElementById("subject-menu").classList.add("hidden");
-        document.getElementById("grade-menu").classList.remove("hidden");
-        document.getElementById("grade-title").innerText = s.toUpperCase() + " - Choose Grade";
+const db = {
+    math: {
+        12: [
+            {q: "What is the derivative of f(x) = ln(sin x)?", a: "cot x", opt: ["tan x", "cot x", "1/sin x", "cos x"]},
+            {q: "The limit of (sin x)/x as x approaches 0 is:", a: "1", opt: ["0", "1", "undefined", "inf"]},
+            {q: "Find the slope of the line tangent to y = x² at x=3.", a: "6", opt: ["3", "6", "9", "2"]},
+            {q: "Which of the following is a unit vector?", a: "(0, 1)", opt: ["(1, 1)", "(0, 1)", "(2, 0)", "(1, 2)"]},
+            {q: "∫ e^x dx is equal to:", a: "e^x + c", opt: ["e^x + c", "xe^x", "ln x", "1/e^x"]},
+            {q: "Solve for x: log(x) + log(2) = log(10)", a: "5", opt: ["2", "5", "8", "20"]},
+            {q: "The period of y = sin(2x) is:", a: "π", opt: ["2π", "π", "π/2", "4π"]},
+            {q: "Find the distance between (0,0) and (3,4).", a: "5", opt: ["7", "5", "12", "25"]},
+            {q: "If A is a 2x2 matrix and |A|=5, then |2A| is:", a: "20", opt: ["10", "20", "5", "25"]},
+            {q: "The sum of the infinite series 1 + 1/2 + 1/4 + ... is:", a: "2", opt: ["1.5", "2", "3", "infinity"]}
+        ]
+    },
+    phys: {
+        12: [
+            {q: "The rate of change of momentum is equal to:", a: "Force", opt: ["Work", "Power", "Force", "Impulse"]},
+            {q: "Unit of Magnetic Flux density (B):", a: "Tesla", opt: ["Weber", "Tesla", "Henry", "Farad"]},
+            {q: "A car accelerates from 0 to 20m/s in 4s. Acceleration?", a: "5 m/s²", opt: ["80", "5 m/s²", "10", "4"]},
+            {q: "Energy of a photon is given by:", a: "hf", opt: ["mc²", "hf", "1/2mv²", "mgh"]},
+            {q: "The color of light with the longest wavelength is:", a: "Red", opt: ["Blue", "Violet", "Green", "Red"]},
+            {q: "Ohm's law is represented by:", a: "V = IR", opt: ["P = IV", "V = IR", "F = ma", "W = Fd"]},
+            {q: "Capacitance is measured in:", a: "Farads", opt: ["Ohms", "Farads", "Volts", "Henrys"]},
+            {q: "Escape velocity on Earth is approx:", a: "11.2 km/s", opt: ["9.8 km/s", "11.2 km/s", "3x10^8", "5"]},
+            {q: "Sound waves cannot travel through:", a: "Vacuum", opt: ["Water", "Air", "Steel", "Vacuum"]},
+            {q: "The center of gravity of a uniform ring is at:", a: "Its center", opt: ["The edge", "Its center", "Anywhere", "Outside"]}
+        ]
     }
+};
 
-    function startQuiz(g) {
-        grade = g;
-        currentQs = (database[sub] && database[sub][g]) ? database[sub][g] : hardDefault;
-        qIdx = 0; score = 0;
-        document.getElementById("grade-menu").classList.add("hidden");
-        document.getElementById("quiz-box").classList.remove("hidden");
-        showQ();
-    }
+// Generic Questions for other grades
+const gen = [
+    {q: "Which of the following is a prime number?", a: "17", opt: ["15", "17", "21", "9"]},
+    {q: "Chemical symbol for Sodium?", a: "Na", opt: ["S", "So", "Na", "Ni"]},
+    {q: "The powerhouse of the cell is:", a: "Mitochondria", opt: ["Nucleus", "Ribosome", "Mitochondria", "Wall"]},
+    {q: "The past tense of 'Drink' is:", a: "Drank", opt: ["Drinked", "Drunk", "Drank", "Drinks"]},
+    {q: "What is 20% of 50?", a: "10", opt: ["5", "10", "15", "20"]},
+    {q: "Who is the father of Genetics?", a: "Mendel", opt: ["Darwin", "Mendel", "Newton", "Einstein"]},
+    {q: "Smallest unit of life?", a: "Cell", opt: ["Atom", "Cell", "Tissue", "Organ"]},
+    {q: "Opposite of 'Success'?", a: "Failure", opt: ["Win", "Failure", "Victory", "Gain"]},
+    {q: "Which gas do plants absorb?", a: "CO2", opt: ["Oxygen", "Nitrogen", "CO2", "Argon"]},
+    {q: "Sum of angles in a square?", a: "360", opt: ["180", "90", "360", "270"]}
+];
 
-    function showQ() {
-        if(qIdx >= currentQs.length) return finish();
-        const data = currentQs[qIdx];
-        document.getElementById("status").innerText = `Question ${qIdx + 1}/${currentQs.length}`;
-        document.getElementById("q-text").innerText = data.q;
-        const list = document.getElementById("option-list");
-        list.innerHTML = "";
-        data.opt.forEach(o => {
-            const b = document.createElement("button");
-            b.className = "option";
-            b.innerText = o;
-            b.onclick = () => {
-                const all = document.querySelectorAll(".option");
-                all.forEach(btn => btn.disabled = true);
-                if(o === data.a) { score++; b.classList.add("correct"); }
-                else { b.classList.add("wrong"); all.forEach(btn => {if(btn.innerText === data.a) btn.classList.add("correct");}); }
-                setTimeout(() => { qIdx++; showQ(); }, 1200);
-            };
-            list.appendChild(b);
-        });
-    }
+let s="", g=0, idx=0, sc=0, qs=[];
 
-    function finish() {
-        document.getElementById("quiz-box").classList.add("hidden");
-        document.getElementById("result-box").classList.remove("hidden");
-        document.getElementById("final-score").innerText = `${score}/${currentQs.length}`;
-        document.getElementById("feedback").innerText = score === currentQs.length ? "Genius! 🎓" : "Good try, keep studying! 📚";
-    }
+function pickSub(sub) {
+    s = sub;
+    document.getElementById("subject-menu").classList.add("hidden");
+    document.getElementById("grade-menu").classList.remove("hidden");
+}
+
+function start(gr) {
+    g = gr;
+    qs = (db[s] && db[s][g]) ? db[s][g] : gen;
+    idx=0; sc=0;
+    document.getElementById("grade-menu").classList.add("hidden");
+    document.getElementById("quiz-box").classList.remove("hidden");
+    show();
+}
+
+function show() {
+    if(idx >= qs.length) return end();
+    const d = qs[idx];
+    document.getElementById("status").innerText = `Question ${idx+1}/${qs.length}`;
+    document.getElementById("q-text").innerText = d.q;
+    const div = document.getElementById("options");
+    div.innerHTML = "";
+    d.opt.forEach(o => {
+        const b = document.createElement("button");
+        b.className = "option";
+        b.innerText = o;
+        b.onclick = () => {
+            const all = document.querySelectorAll(".option");
+            all.forEach(x => x.disabled = true);
+            if(o === d.a) { sc++; b.classList.add("correct"); }
+            else { b.classList.add("wrong"); all.forEach(x => {if(x.innerText===d.a) x.classList.add("correct");}); }
+            setTimeout(() => { idx++; show(); }, 1000);
+        };
+        div.appendChild(b);
+    });
+}
+
+function end() {
+    document.getElementById("quiz-box").classList.add("hidden");
+    document.getElementById("result-box").classList.remove("hidden");
+    document.getElementById("final-score").innerText = `${sc}/${qs.length}`;
+    document.getElementById("msg").innerText = sc > 7 ? "Excellent! You are ready! 🔥" : "Keep practicing! 📚";
+}
 </script>
 </body>
     </html>
