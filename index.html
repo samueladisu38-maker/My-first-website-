@@ -3,227 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Master Prep - Final Edition</title>
+    <title>Sami Master Entrance Prep</title>
     <style>
         :root {
-            --math: #6366f1; --phys: #f59e0b; --chem: #10b981; 
-            --bio: #ec4899; --eng: #8b5cf6; --dark: #0f172a; --bg: #f1f5f9;
+            --math: #4f46e5; --phys: #f59e0b; --chem: #10b981; 
+            --bio: #e11d48; --eng: #7c3aed; --dark: #0f172a; --bg: #f8fafc;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; color: #334155; }
-        header { background: var(--dark); color: white; padding: 40px 20px; text-align: center; border-bottom: 5px solid var(--math); }
+        header { background: var(--dark); color: white; padding: 40px 20px; text-align: center; border-bottom: 6px solid var(--math); }
         .container { width: 92%; max-width: 800px; margin: 20px auto; }
         
-        /* Menu Cards */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .card { background: white; padding: 20px; border-radius: 15px; cursor: pointer; text-align: center; font-weight: bold; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: 0.3s; border-bottom: 5px solid #ddd; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        /* Dashboard Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card { background: white; padding: 25px 10px; border-radius: 20px; cursor: pointer; text-align: center; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 6px solid #cbd5e1; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 20px rgba(0,0,0,0.1); }
         
-        .m-math { border-color: var(--math); color: var(--math); }
-        .m-phys { border-color: var(--phys); color: var(--phys); }
-        .m-chem { border-color: var(--chem); color: var(--chem); }
-        .m-bio { border-color: var(--bio); color: var(--bio); }
-        .m-eng { border-color: var(--eng); color: var(--eng); }
+        .c-math { border-color: var(--math); color: var(--math); }
+        .c-phys { border-color: var(--phys); color: var(--phys); }
+        .c-chem { border-color: var(--chem); color: var(--chem); }
+        .c-bio { border-color: var(--bio); color: var(--bio); }
+        .c-eng { border-color: var(--eng); color: var(--eng); }
 
-        /* Content Sections */
-        .content-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; }
-        .note-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
-        .btn-back { background: var(--dark); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; }
+        /* Content Viewer */
+        .content-box { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); display: none; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn { padding: 12px 20px; border-radius: 12px; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-back { background: var(--dark); color: white; }
+        .tab-btn { flex: 1; background: #e2e8f0; color: #475569; margin: 5px; }
+        .active-tab { background: var(--dark); color: white; }
+
+        /* Notes Styling */
+        .note-body { line-height: 1.8; }
+        .note-body h3 { background: #f1f5f9; padding: 10px; border-radius: 8px; color: var(--dark); }
+        .formula { color: #be123c; font-weight: bold; font-family: monospace; background: #fff1f2; padding: 2px 6px; border-radius: 4px; }
+
+        /* Quiz Styling */
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; background: white; text-align: left; cursor: pointer; font-size: 16px; }
+        .correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
+        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
         .hidden { display: none; }
-        h2 { margin: 0; }
-        h3 { color: var(--dark); background: #f8fafc; padding: 10px; border-radius: 5px; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 12px; line-height: 1.6; }
-        .formula { background: #fff7ed; padding: 5px 10px; border-radius: 4px; font-weight: bold; color: #c2410c; border: 1px dashed #fdba74; }
-
-        /* Quiz Style */
-        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 10px; background: white; text-align: left; cursor: pointer; font-size: 16px; transition: 0.2s; }
-        .correct { background: #dcfce7 !important; border-color: #22c55e !important; }
-        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>SAMI PREP MASTER</h1>
-    <p>Grade 9-12 All-in-One Summary</p>
+    <h1>SAMI PREP PRO</h1>
+    <p>Grade 9-12 Master Summary & Exams</p>
 </header>
 
 <div class="container">
-    <div id="main-menu">
-        <h2 style="text-align: center; margin-bottom: 20px;">Select a Subject</h2>
+    <div id="home">
+        <h2 style="text-align: center;">Choose Your Subject</h2>
         <div class="grid">
-            <div class="card m-math" onclick="showSub('math')">MATHEMATICS<br>📘</div>
-            <div class="card m-phys" onclick="showSub('phys')">PHYSICS<br>🚀</div>
-            <div class="card m-chem" onclick="showSub('chem')">CHEMISTRY<br>🧪</div>
-            <div class="card m-bio" onclick="showSub('bio')">BIOLOGY<br>🌿</div>
-            <div class="card m-eng" onclick="showSub('eng')">ENGLISH<br>✍️</div>
+            <div class="card c-math" onclick="openSub('math')">MATH<br>📏</div>
+            <div class="card c-phys" onclick="openSub('phys')">PHYSICS<br>🚀</div>
+            <div class="card c-chem" onclick="openSub('chem')">CHEMISTRY<br>🧪</div>
+            <div class="card c-bio" onclick="openSub('bio')">BIOLOGY<br>🧬</div>
+            <div class="card c-eng" onclick="openSub('eng')">ENGLISH<br>✍️</div>
         </div>
     </div>
 
-    <div id="content-viewer" class="content-box">
-        <div class="note-header">
-            <h2 id="title">Subject</h2>
-            <button class="btn-back" onclick="goHome()">Back Home</button>
+    <div id="viewer" class="content-box">
+        <div class="header-row">
+            <h2 id="sub-title">Subject</h2>
+            <button class="btn btn-back" onclick="goHome()">Home</button>
         </div>
         
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <button class="btn-back" style="flex:1; background: #64748b;" onclick="toggleView('notes')">Read Notes</button>
-            <button class="btn-back" style="flex:1; background: #64748b;" onclick="toggleView('quiz')">Take Quiz</button>
+        <div style="display: flex; margin-bottom: 20px;">
+            <button id="tab-n" class="btn tab-btn active-tab" onclick="switchTab('notes')">Short Notes</button>
+            <button id="tab-q" class="btn tab-btn" onclick="switchTab('quiz')">Practice Quiz</button>
         </div>
 
-        <div id="notes-view">
-            <div id="notes-text"></div>
-        </div>
+        <div id="notes-area" class="note-body"></div>
 
-        <div id="quiz-view" class="hidden">
-            <div id="q-text" style="font-size: 18px; font-weight: bold; margin-bottom: 20px;"></div>
-            <div id="options-area"></div>
+        <div id="quiz-area" class="hidden">
+            <div id="q-text" style="font-size: 19px; font-weight: bold; margin-bottom: 20px;"></div>
+            <div id="options-list"></div>
         </div>
     </div>
 </div>
 
 <script>
-    const data = {
-        math: {
-            notes: `
-                <h3>Grade 9-10: Foundations</h3>
+const masterData = {
+    math: {
+        notes: `<h3>Grade 9-12 Master Notes</h3>
                 <ul>
-                    <li><b>Quadratic Equation:</b> $ax^2 + bx + c = 0$. Solution: <span class="formula">x = [-b ± √(b²-4ac)] / 2a</span></li>
-                    <li><b>Trigonometry:</b> $\\sin^2\\theta + \\cos^2\\theta = 1$. Remember SOH-CAH-TOA for right triangles.</li>
-                </ul>
-                <h3>Grade 11-12: Advanced</h3>
-                <ul>
-                    <li><b>Limits:</b> $\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$.</li>
-                    <li><b>Derivatives:</b> $\\frac{d}{dx}(x^n) = nx^{n-1}$. Derivative of $\\sin x = \\cos x$.</li>
-                    <li><b>Integration:</b> $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$.</li>
+                    <li><b>Algebra:</b> For $ax^2 + bx + c = 0$, $x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}$</li>
+                    <li><b>Calculus:</b> $\frac{d}{dx}(\sin x) = \cos x$; $\frac{d}{dx}(\ln x) = \frac{1}{x}$</li>
+                    <li><b>Logarithms:</b> $\log(AB) = \log A + \log B$; $\log(A/B) = \log A - \log B$</li>
+                    <li><b>Geometry:</b> Volume of Sphere = $\frac{4}{3}\pi r^3$</li>
                 </ul>`,
-            quiz: [
-                {q: "What is the derivative of x² + 5x?", a: "2x + 5", opt: ["2x", "2x + 5", "x + 5", "5"]},
-                {q: "Value of log10(1000)?", a: "3", opt: ["2", "3", "10", "100"]}
-            ]
-        },
-        phys: {
-            notes: `
-                <h3>Grade 9-10: Motion & Energy</h3>
+        quiz: [{q: "Derivative of e^x?", a: "e^x", opt: ["xe^{x-1}", "e^x", "ln x", "1/e^x"]}, {q: "Integral of 1/x?", a: "ln x", opt: ["x", "ln x", "-1/x^2", "e^x"]}]
+    },
+    phys: {
+        notes: `<h3>Grade 9-12 Master Notes</h3>
                 <ul>
-                    <li><b>Newton's 2nd Law:</b> <span class="formula">F = ma</span>. (Force = mass × acceleration).</li>
-                    <li><b>Work:</b> $W = Fd \\cos \\theta$. Unit is Joule (J).</li>
-                </ul>
-                <h3>Grade 11-12: Fields & Quantum</h3>
-                <ul>
-                    <li><b>Electromagnetism:</b> $V = IR$ (Ohm's Law). $P = IV$ (Power).</li>
-                    <li><b>Modern Physics:</b> $E = hf$ (Energy of photon). $E = mc^2$ (Einstein's relation).</li>
+                    <li><b>Mechanics:</b> Newton's 2nd Law: <span class="formula">F = ma</span>; Momentum: $p = mv$</li>
+                    <li><b>Energy:</b> $Work = \Delta KE$; $Power = F \cdot v$</li>
+                    <li><b>Quantum:</b> $E = hf$; De Broglie wavelength: $\lambda = h/p$</li>
+                    <li><b>Electricity:</b> $V = IR$; $P = V^2/R$</li>
                 </ul>`,
-            quiz: [
-                {q: "Unit of Magnetic Flux?", a: "Weber", opt: ["Tesla", "Weber", "Henry", "Farad"]},
-                {q: "Speed of light in vacuum?", a: "3x10^8 m/s", opt: ["3x10^6", "3x10^8 m/s", "1000", "Inf"]}
-            ]
-        },
-        chem: {
-            notes: `
-                <h3>Grade 9-10: Atoms & Bonds</h3>
+        quiz: [{q: "Unit of Magnetic Induction?", a: "Tesla", opt: ["Weber", "Tesla", "Henry", "Farad"]}, {q: "F=ma is Newton's ___ Law?", a: "2nd", opt: ["1st", "2nd", "3rd", "None"]}]
+    },
+    chem: {
+        notes: `<h3>Grade 9-12 Master Notes</h3>
                 <ul>
-                    <li><b>Mole Concept:</b> 1 mole = $6.022 \\times 10^{23}$ particles (Avogadro's number).</li>
-                    <li><b>Bonds:</b> Ionic (transfer of e-), Covalent (sharing of e-).</li>
-                </ul>
-                <h3>Grade 11-12: Kinetics & Equilibrium</h3>
-                <ul>
-                    <li><b>pH Scale:</b> $\\text{pH} = -\\log[H^+]$. Acid < 7, Base > 7.</li>
-                    <li><b>Ideal Gas Law:</b> <span class="formula">PV = nRT</span>.</li>
+                    <li><b>Atomic:</b> $n$ = Principal Quantum Number (defines shell size).</li>
+                    <li><b>Bonding:</b> Electronegativity difference > 1.7 usually means Ionic bond.</li>
+                    <li><b>Gas Laws:</b> <span class="formula">PV = nRT</span>; $P_1V_1 = P_2V_2$ (Boyle's).</li>
+                    <li><b>Organic:</b> Alkanes ($C_nH_{2n+2}$), Alkenes ($C_nH_{2n}$), Alkynes ($C_nH_{2n-2}$).</li>
                 </ul>`,
-            quiz: [
-                {q: "Functional group of Alcohol?", a: "-OH", opt: ["-CHO", "-OH", "-COOH", "-NH2"]},
-                {q: "Strongest Acid pH?", a: "1", opt: ["1", "7", "10", "14"]}
-            ]
-        },
-        bio: {
-            notes: `
-                <h3>Grade 9-10: Cells & Diversity</h3>
+        quiz: [{q: "pH of a neutral solution?", a: "7", opt: ["0", "7", "14", "1"]}, {q: "Symbol for Silver?", a: "Ag", opt: ["Si", "Ag", "Au", "Fe"]}]
+    },
+    bio: {
+        notes: `<h3>Grade 9-12 Master Notes</h3>
                 <ul>
-                    <li><b>Cell:</b> Mitochondria is the "Powerhouse" (ATP production).</li>
-                    <li><b>Genetics:</b> Phenotype (physical trait), Genotype (genetic makeup).</li>
-                </ul>
-                <h3>Grade 11-12: Systems & Evolution</h3>
-                <ul>
-                    <li><b>DNA:</b> Double helix structure. Bases: A-T, G-C.</li>
-                    <li><b>Homeostasis:</b> Maintenance of constant internal environment.</li>
+                    <li><b>Cytology:</b> Mitochondria (ATP production); Ribosomes (Protein synthesis).</li>
+                    <li><b>Genetics:</b> Mendel's Law of Segregation and Independent Assortment.</li>
+                    <li><b>Evolution:</b> Natural Selection (Darwin); Inheritance of Acquired Traits (Lamarck - disproved).</li>
+                    <li><b>Human Bio:</b> Red blood cells lack a nucleus at maturity.</li>
                 </ul>`,
-            quiz: [
-                {q: "Where does Photosynthesis occur?", a: "Chloroplast", opt: ["Nucleus", "Chloroplast", "Cell Wall", "Vacuole"]},
-                {q: "Chromosomes in humans?", a: "46", opt: ["23", "46", "48", "30"]}
-            ]
-        },
-        eng: {
-            notes: `
-                <h3>Grade 9-12: Grammar & Writing</h3>
+        quiz: [{q: "Universal recipient blood type?", a: "AB", opt: ["O", "A", "B", "AB"]}, {q: "Where is bile stored?", a: "Gallbladder", opt: ["Liver", "Stomach", "Gallbladder", "Pancreas"]}]
+    },
+    eng: {
+        notes: `<h3>Grade 9-12 Master Notes</h3>
                 <ul>
-                    <li><b>Tenses:</b> Present Perfect (has/have + V3), Past Perfect (had + V3).</li>
-                    <li><b>Conditionals:</b> Type 1 (If + Present, Will + V1). Type 2 (If + Past, Would + V1).</li>
-                    <li><b>Active/Passive:</b> Focus on the receiver of the action.</li>
+                    <li><b>Conditionals:</b> Type 3: If + had + V3, would have + V3.</li>
+                    <li><b>Reported Speech:</b> Present Simple changes to Past Simple.</li>
+                    <li><b>Passive Voice:</b> Object + be (proper tense) + V3 (Past Participle).</li>
+                    <li><b>Relative Clauses:</b> 'Who' for people, 'Which' for things, 'Whose' for possession.</li>
                 </ul>`,
-            quiz: [
-                {q: "If I ___ rich, I would buy a car.", a: "were", opt: ["am", "was", "were", "be"]},
-                {q: "She has ___ the book.", a: "written", opt: ["write", "wrote", "written", "writes"]}
-            ]
-        }
-    };
-
-    let currentSub = "";
-    let qIdx = 0;
-
-    function showSub(s) {
-        currentSub = s;
-        document.getElementById('main-menu').classList.add('hidden');
-        document.getElementById('content-viewer').style.display = 'block';
-        document.getElementById('title').innerText = s.toUpperCase();
-        document.getElementById('notes-text').innerHTML = data[s].notes;
-        toggleView('notes');
+        quiz: [{q: "If I ___ known, I would have told you.", a: "had", opt: ["have", "had", "was", "has"]}, {q: "Synonym of 'Abundant'?", a: "Plentiful", opt: ["Scarce", "Plentiful", "Rare", "Small"]}]
     }
+};
 
-    function toggleView(view) {
-        if(view === 'notes') {
-            document.getElementById('notes-view').classList.remove('hidden');
-            document.getElementById('quiz-view').classList.add('hidden');
-        } else {
-            document.getElementById('notes-view').classList.add('hidden');
-            document.getElementById('quiz-view').classList.remove('hidden');
-            startQuiz();
-        }
-    }
+let currentS = "";
+let qIdx = 0;
 
-    function startQuiz() {
-        qIdx = 0;
-        loadQ();
-    }
+function openSub(s) {
+    currentS = s;
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('viewer').style.display = 'block';
+    document.getElementById('sub-title').innerText = s.toUpperCase();
+    document.getElementById('notes-area').innerHTML = masterData[s].notes;
+    switchTab('notes');
+}
 
-    function loadQ() {
-        const qData = data[currentSub].quiz[qIdx];
-        if(!qData) {
-            alert("Quiz Completed!");
-            toggleView('notes');
-            return;
-        }
-        document.getElementById('q-text').innerText = qData.q;
-        const area = document.getElementById('options-area');
-        area.innerHTML = "";
-        qData.opt.forEach(o => {
-            const b = document.createElement("button");
-            b.className = "option";
-            b.innerText = o;
-            b.onclick = () => {
-                if(o === qData.a) b.classList.add('correct');
-                else b.classList.add('wrong');
-                setTimeout(() => { qIdx++; loadQ(); }, 1000);
-            };
-            area.appendChild(b);
-        });
+function switchTab(t) {
+    if(t === 'notes') {
+        document.getElementById('notes-area').classList.remove('hidden');
+        document.getElementById('quiz-area').classList.add('hidden');
+        document.getElementById('tab-n').classList.add('active-tab');
+        document.getElementById('tab-q').classList.remove('active-tab');
+    } else {
+        document.getElementById('notes-area').classList.add('hidden');
+        document.getElementById('quiz-area').classList.remove('hidden');
+        document.getElementById('tab-q').classList.add('active-tab');
+        document.getElementById('tab-n').classList.remove('active-tab');
+        qIdx = 0; loadQ();
     }
+}
 
-    function goHome() {
-        document.getElementById('main-menu').classList.remove('hidden');
-        document.getElementById('content-viewer').style.display = 'none';
-    }
+function loadQ() {
+    const qData = masterData[currentS].quiz[qIdx];
+    if(!qData) { alert("Subject Mastery Complete!"); goHome(); return; }
+    document.getElementById('q-text').innerText = qData.q;
+    const list = document.getElementById('options-list');
+    list.innerHTML = "";
+    qData.opt.forEach(o => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.innerText = o;
+        btn.onclick = () => {
+            if(o === qData.a) btn.classList.add('correct');
+            else btn.classList.add('wrong');
+            setTimeout(() => { qIdx++; loadQ(); }, 1000);
+        };
+        list.appendChild(btn);
+    });
+}
+
+function goHome() {
+    document.getElementById('home').classList.remove('hidden');
+    document.getElementById('viewer').style.display = 'none';
+}
 </script>
 </body>
     </html>
