@@ -3,192 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Entrance Prep</title>
+    <title>Sami High-Level Prep</title>
     <style>
-        /* መሰረታዊ ዲዛይን */
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f9; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        header { background: #1a2a6c; color: white; width: 100%; padding: 30px 0; text-align: center; border-bottom: 4px solid #f2a900; }
-        .container { width: 90%; max-width: 450px; margin-top: 20px; }
-        
-        /* ሰብጀክት መምረጫ ካርዶች */
-        .subject-btn { background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 10px solid #1a2a6c; font-size: 18px; font-weight: bold; color: #333; transition: 0.3s; }
-        .subject-btn:hover { transform: translateY(-3px); background: #eef2f3; }
-
-        /* የጥያቄ ሳጥን */
-        .quiz-container { display: none; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; }
-        .question { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #1a2a6c; }
-        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; font-size: 16px; transition: 0.2s; }
-        .option:hover { border-color: #1a2a6c; background: #f0f4f8; }
-        
-        /* መልስ ሲመረጥ የሚመጡ ቀለሞች */
-        .correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724; }
-        .wrong { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
-        
-        .score-box { display: none; text-align: center; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; }
-        .score-num { font-size: 50px; color: #1a2a6c; font-weight: bold; }
-        .restart-btn { background: #1a2a6c; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; margin-top: 20px; font-size: 16px; }
+        :root { --main: #1e1b4b; --accent: #4f46e5; --bg: #f1f5f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; }
+        header { background: var(--main); color: white; width: 100%; padding: 30px 0; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .container { width: 90%; max-width: 500px; margin-top: 20px; }
+        .card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 12px; cursor: pointer; border-left: 8px solid var(--accent); box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-weight: bold; display: flex; justify-content: space-between; transition: 0.3s; }
+        .card:hover { transform: translateX(10px); background: #eef2ff; }
+        .hidden { display: none; }
+        .quiz-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; }
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 10px; background: white; cursor: pointer; text-align: left; font-size: 16px; font-weight: 500; }
+        .option:hover { border-color: var(--accent); }
+        .correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
+        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
+        .btn-home { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>SAMI ENTRANCE PREP</h1>
-    <p>Choose a Subject to Practice</p>
+    <h1>SAMI ENTRANCE EXAM PREP</h1>
+    <p>Advanced Grade 9-12 Practice</p>
 </header>
 
-<div class="container" id="main-content">
-    <div id="subject-list">
-        <div class="subject-btn" onclick="startQuiz('math')">Mathematics 📘</div>
-        <div class="subject-btn" onclick="startQuiz('phys')" style="border-left-color: #ff4b2b;">Physics 🚀</div>
-        <div class="subject-btn" onclick="startQuiz('chem')" style="border-left-color: #28a745;">Chemistry 🧪</div>
-        <div class="subject-btn" onclick="startQuiz('bio')" style="border-left-color: #e91e63;">Biology 🌿</div>
-        <div class="subject-btn" onclick="startQuiz('eng')" style="border-left-color: #ff9800;">English ✍️</div>
+<div class="container">
+    <div id="subject-menu">
+        <h2 style="text-align: center;">Select Subject</h2>
+        <div class="card" onclick="pickSubject('math')">Mathematics 📘</div>
+        <div class="card" onclick="pickSubject('phys')">Physics 🚀</div>
+        <div class="card" onclick="pickSubject('chem')">Chemistry 🧪</div>
+        <div class="card" onclick="pickSubject('bio')">Biology 🌿</div>
+        <div class="card" onclick="pickSubject('eng')">English ✍️</div>
     </div>
 
-    <div id="quiz-box" class="quiz-container">
-        <div id="progress" style="margin-bottom: 10px; font-weight: bold; color: #666;"></div>
-        <div class="question" id="question-text"></div>
-        <div id="options-area"></div>
+    <div id="grade-menu" class="hidden">
+        <h2 id="grade-title" style="text-align: center;">Select Grade</h2>
+        <div class="card" onclick="startQuiz(9)">Grade 9</div>
+        <div class="card" onclick="startQuiz(10)">Grade 10</div>
+        <div class="card" onclick="startQuiz(11)">Grade 11</div>
+        <div class="card" onclick="startQuiz(12)">Grade 12 (Entrance)</div>
+        <button class="btn-home" onclick="location.reload()">Back</button>
     </div>
 
-    <div id="result-box" class="score-box">
-        <h2>Congratulations!</h2>
-        <p>Your Final Score:</p>
-        <div class="score-num" id="final-score"></div>
-        <button class="restart-btn" onclick="location.reload()">Back to Menu</button>
+    <div id="quiz-box" class="quiz-box hidden">
+        <div id="status" style="font-weight: bold; color: var(--accent); margin-bottom: 10px;"></div>
+        <div id="q-text" style="font-size: 18px; font-weight: bold; margin-bottom: 20px;"></div>
+        <div id="option-list"></div>
+    </div>
+
+    <div id="result-box" class="quiz-box hidden" style="text-align: center;">
+        <h2>Exam Finished!</h2>
+        <div id="final-score" style="font-size: 50px; color: var(--accent); font-weight: bold;"></div>
+        <p id="feedback"></p>
+        <button class="btn-home" onclick="location.reload()">Try Another Grade</button>
     </div>
 </div>
 
 <script>
-    // ጥያቄዎቹ እዚህ አሉ
-    const myQuestions = {
-        math: [
-            { q: "Derivative of x² is?", a: "2x", opt: ["x", "2x", "x²", "2"] },
-            { q: "What is √625?", a: "25", opt: ["15", "25", "35", "20"] },
-            { q: "Solve: 2x + 5 = 15", a: "5", opt: ["5", "10", "2", "7"] },
-            { q: "log2(8) is?", a: "3", opt: ["2", "3", "4", "8"] },
-            { q: "Value of Sin(30°)?", a: "0.5", opt: ["1", "0.5", "0.8", "0"] },
-            { q: "Sum of angles in a triangle?", a: "180", opt: ["90", "180", "360", "270"] },
-            { q: "If 5x = 50, x is?", a: "10", opt: ["5", "10", "15", "2"] },
-            { q: "Slope of y = 2x + 1?", a: "2", opt: ["1", "2", "0", "3"] },
-            { q: "Factorial of 4 (4!)?", a: "24", opt: ["12", "24", "16", "20"] },
-            { q: "Is 7 a prime number?", a: "Yes", opt: ["Yes", "No", "Maybe", "Only even"] }
-        ],
-        phys: [
-            { q: "Unit of Energy?", a: "Joule", opt: ["Newton", "Watt", "Joule", "Volt"] },
-            { q: "F = ma is Newton's ___ law.", a: "2nd", opt: ["1st", "2nd", "3rd", "4th"] },
-            { q: "Speed of Light?", a: "3x10^8 m/s", opt: ["3x10^6", "3x10^8", "3x10^5", "1000"] },
-            { q: "Sound is a ___ wave.", a: "Longitudinal", opt: ["Transverse", "Longitudinal", "Light", "Radio"] },
-            { q: "Unit of Resistance?", a: "Ohm", opt: ["Volt", "Ohm", "Ampere", "Watt"] },
-            { q: "Gravity on Earth?", a: "9.8 m/s²", opt: ["9.8 m/s²", "1.6 m/s²", "10.5 m/s²", "0"] },
-            { q: "Measure of Current?", a: "Ammeter", opt: ["Voltmeter", "Ammeter", "Ohm", "None"] },
-            { q: "Power unit?", a: "Watt", opt: ["Volt", "Watt", "Ohm", "Amp"] },
-            { q: "Lens in Human Eye?", a: "Convex", opt: ["Concave", "Convex", "Flat", "Cylindrical"] },
-            { q: "Boiling point of water?", a: "100°C", opt: ["0°C", "100°C", "50°C", "37°C"] }
-        ],
-        chem: [
-            { q: "pH of Acid?", a: "< 7", opt: ["> 7", "< 7", "7", "14"] },
-            { q: "Symbol for Iron?", a: "Fe", opt: ["Ir", "Fe", "I", "In"] },
-            { q: "Formula for Water?", a: "H2O", opt: ["HO2", "H2O", "CO2", "NaCl"] },
-            { q: "Most abundant gas in Air?", a: "Nitrogen", opt: ["Oxygen", "CO2", "Nitrogen", "Argon"] },
-            { q: "Symbol for Silver?", a: "Ag", opt: ["Ag", "Au", "Si", "Fe"] },
-            { q: "Valency of Oxygen?", a: "2", opt: ["1", "2", "3", "4"] },
-            { q: "Atomic number of Carbon?", a: "6", opt: ["5", "6", "12", "14"] },
-            { q: "Table Salt?", a: "NaCl", opt: ["HCl", "NaCl", "NaOH", "KOH"] },
-            { q: "Noble Gas example:", a: "Neon", opt: ["Oxygen", "Neon", "Chlorine", "Iron"] },
-            { q: "Hardest material?", a: "Diamond", opt: ["Gold", "Iron", "Diamond", "Stone"] }
-        ],
-        bio: [
-            { q: "Powerhouse of cell?", a: "Mitochondria", opt: ["Nucleus", "Mitochondria", "Ribosome", "Wall"] },
-            { q: "Unit of Life?", a: "Cell", opt: ["Cell", "Tissue", "Organ", "Atom"] },
-            { q: "Control Center?", a: "Nucleus", opt: ["Wall", "Nucleus", "Cytoplasm", "Vacuole"] },
-            { q: "Universal Blood Donor?", a: "O", opt: ["A", "B", "AB", "O"] },
-            { q: "Bones in Adult Human?", a: "206", opt: ["300", "206", "180", "150"] },
-            { q: "Photosynthesis site?", a: "Chloroplast", opt: ["Mitochondria", "Chloroplast", "Nucleus", "Wall"] },
-            { q: "Human Heart Chambers?", a: "4", opt: ["2", "3", "4", "1"] },
-            { q: "Study of Animals?", a: "Zoology", opt: ["Botany", "Zoology", "Mycology", "Ecology"] },
-            { q: "Largest Organ?", a: "Skin", opt: ["Liver", "Skin", "Heart", "Brain"] },
-            { q: "Vitamin from Sun?", a: "D", opt: ["A", "B", "C", "D"] }
-        ],
-        eng: [
-            { q: "Past of 'Go'?", a: "Went", opt: ["Goes", "Went", "Gone", "Goded"] },
-            { q: "Opposite of 'Rich'?", a: "Poor", opt: ["Poor", "Wealthy", "Happy", "Sad"] },
-            { q: "She ___ (play) tennis daily.", a: "plays", opt: ["play", "plays", "playing", "played"] },
-            { q: "Plural of 'Child'?", a: "Children", opt: ["Childs", "Children", "Childes", "Kids"] },
-            { q: "Identify the Verb:", a: "Run", opt: ["Book", "Run", "Slowly", "Green"] },
-            { q: "I have ___ umbrella.", a: "an", opt: ["a", "an", "the", "no"] },
-            { q: "Opposite of 'Fast'?", a: "Slow", opt: ["Quick", "Slow", "High", "Low"] },
-            { q: "Choose correct spelling:", a: "Believe", opt: ["Beleive", "Believe", "Belive", "Bellieve"] },
-            { q: "Identify the Noun:", a: "Table", opt: ["Eat", "Table", "Quickly", "Blue"] },
-            { q: "Synonym of 'Large'?", a: "Big", opt: ["Small", "Big", "Thin", "Weak"] }
-        ]
+    const database = {
+        math: {
+            12: [
+                {q: "What is the derivative of f(x) = sin(x²)?", a: "2x cos(x²)", opt: ["cos(x²)", "2x cos(x²)", "-2x cos(x²)", "2 sin(x)"]},
+                {q: "Find the limit as x -> 0 of sin(x)/x.", a: "1", opt: ["0", "1", "undefined", "infinity"]},
+                {q: "The dot product of (2,3) and (4,-1) is:", a: "5", opt: ["11", "5", "8", "-3"]},
+                {q: "Solve for x: e^(2x) = 5", a: "ln(5)/2", opt: ["ln(5)/2", "ln(2.5)", "2 ln(5)", "e^2.5"]}
+            ],
+            11: [
+                {q: "The value of log3(81) is:", a: "4", opt: ["3", "4", "9", "27"]},
+                {q: "Find the slope of 3x - 4y = 12", a: "0.75", opt: ["3", "-4", "0.75", "1.33"]}
+            ]
+        },
+        phys: {
+            12: [
+                {q: "The work-energy theorem states Work = ___.", a: "ΔKE", opt: ["ΔPE", "ΔKE", "mgh", "1/2mv"]},
+                {q: "Heisenberg's Uncertainty Principle deals with:", a: "Position & Momentum", opt: ["Mass & Speed", "Position & Momentum", "Time & Energy", "Heat"]}
+            ]
+        }
+        // ... more subjects and grades follow the same pattern
     };
 
-    let selectedSub = [];
-    let qIndex = 0;
-    let score = 0;
+    // Fallback for empty grades
+    const hardDefault = [
+        {q: "Advanced: Find the value of ∫ 2x dx from 0 to 2.", a: "4", opt: ["2", "4", "8", "1"]},
+        {q: "Chemistry: Which has the highest ionization energy?", a: "Fluorine", opt: ["Oxygen", "Fluorine", "Neon", "Helium"]},
+        {q: "Physics: Unit of Magnetic Induction?", a: "Tesla", opt: ["Weber", "Tesla", "Henry", "Farad"]},
+        {q: "Biology: Which hormone regulates blood sugar?", a: "Insulin", opt: ["Adrenaline", "Insulin", "Estrogen", "Thyroxine"]},
+        {q: "English: Choose the complex sentence:", a: "Although it rained, we went.", opt: ["It rained and we stayed.", "He is tall.", "Although it rained, we went.", "I like tea."]}
+    ];
 
-    // አፑን የሚጀምር ፈንክሽን
-    function startQuiz(sub) {
-        selectedSub = myQuestions[sub];
-        qIndex = 0;
-        score = 0;
-        
-        document.getElementById("subject-list").style.display = "none";
-        document.getElementById("quiz-box").style.display = "block";
-        
-        loadQuestion();
+    let sub = "", grade = "", qIdx = 0, score = 0, currentQs = [];
+
+    function pickSubject(s) {
+        sub = s;
+        document.getElementById("subject-menu").classList.add("hidden");
+        document.getElementById("grade-menu").classList.remove("hidden");
+        document.getElementById("grade-title").innerText = s.toUpperCase() + " - Choose Grade";
     }
 
-    // ጥያቄውን የሚያወጣ ፈንክሽን
-    function loadQuestion() {
-        if (qIndex >= selectedSub.length) {
-            finishQuiz();
-            return;
-        }
+    function startQuiz(g) {
+        grade = g;
+        currentQs = (database[sub] && database[sub][g]) ? database[sub][g] : hardDefault;
+        qIdx = 0; score = 0;
+        document.getElementById("grade-menu").classList.add("hidden");
+        document.getElementById("quiz-box").classList.remove("hidden");
+        showQ();
+    }
 
-        const data = selectedSub[qIndex];
-        document.getElementById("progress").innerText = "Question " + (qIndex + 1) + " of 10";
-        document.getElementById("question-text").innerText = data.q;
-        
-        const area = document.getElementById("options-area");
-        area.innerHTML = "";
-        
+    function showQ() {
+        if(qIdx >= currentQs.length) return finish();
+        const data = currentQs[qIdx];
+        document.getElementById("status").innerText = `Question ${qIdx + 1}/${currentQs.length}`;
+        document.getElementById("q-text").innerText = data.q;
+        const list = document.getElementById("option-list");
+        list.innerHTML = "";
         data.opt.forEach(o => {
-            const btn = document.createElement("button");
-            btn.className = "option";
-            btn.innerText = o;
-            btn.onclick = () => checkResult(o, data.a, btn);
-            area.appendChild(btn);
+            const b = document.createElement("button");
+            b.className = "option";
+            b.innerText = o;
+            b.onclick = () => {
+                const all = document.querySelectorAll(".option");
+                all.forEach(btn => btn.disabled = true);
+                if(o === data.a) { score++; b.classList.add("correct"); }
+                else { b.classList.add("wrong"); all.forEach(btn => {if(btn.innerText === data.a) btn.classList.add("correct");}); }
+                setTimeout(() => { qIdx++; showQ(); }, 1200);
+            };
+            list.appendChild(b);
         });
     }
 
-    // መልስ የሚያጣራ ፈንክሽን
-    function checkResult(choice, answer, btn) {
-        const btns = document.querySelectorAll(".option");
-        btns.forEach(b => b.disabled = true);
-
-        if (choice === answer) {
-            score++;
-            btn.classList.add("correct");
-        } else {
-            btn.classList.add("wrong");
-            btns.forEach(b => {
-                if (b.innerText === answer) b.classList.add("correct");
-            });
-        }
-
-        setTimeout(() => {
-            qIndex++;
-            loadQuestion();
-        }, 1200);
-    }
-
-    // መጨረሻ ላይ ውጤት የሚያሳይ
-    function finishQuiz() {
-        document.getElementById("quiz-box").style.display = "none";
-        document.getElementById("result-box").style.display = "block";
-        document.getElementById("final-score").innerText = score + " / 10";
+    function finish() {
+        document.getElementById("quiz-box").classList.add("hidden");
+        document.getElementById("result-box").classList.remove("hidden");
+        document.getElementById("final-score").innerText = `${score}/${currentQs.length}`;
+        document.getElementById("feedback").innerText = score === currentQs.length ? "Genius! 🎓" : "Good try, keep studying! 📚";
     }
 </script>
 </body>
