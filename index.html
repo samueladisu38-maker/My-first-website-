@@ -3,6 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sami Prep - Notes & Quiz</title>
+    <style>
+        :root { --main: #1e293b; --accent: #6366f1; --bg: #f1f5f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
+        header { background: var(--main); color: white; padding: 30px; text-align: center; border-bottom: 5px solid var(--accent); }
+        .container { width: 90%; max-width: 600px; margin: 20px auto; }
+        .card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; cursor: pointer; border-left: 8px solid var(--accent); box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-weight: bold; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); background: #f8fafc; }
+        .hidden { display: none; }
+        .note-content { background: white; padding: 25px; border-radius: 20px; line-height: 1.6; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .note-content h2 { color: var(--accent); }
+        .btn { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; cursor: pointer; margin-top: 15px; font-weight: bold; }
+        .quiz-box { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #ddd; border-radius: 8px; background: white; text-align: left; cursor: pointer; }
+        .correct { background: #dcfce7 !important; border-color: #22c55e !important; }
+        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SAMI PREP 2.0</h1>
+    <p>Short Notes & Entrance Questions</p>
+</header>
+
+<div class="container">
+    <div id="main-menu">
+        <div class="card" onclick="showSection('notes-menu')">📖 Read Short Notes (9-12)</div>
+        <div class="card" onclick="showSection('subject-menu')" style="border-left-color: #f59e0b;">✍️ Take Practice Quiz</div>
+    </div>
+
+    <div id="notes-menu" class="hidden">
+        <button class="btn" onclick="goBack()">← Back</button>
+        <h2 style="text-align: center;">Select Subject for Notes</h2>
+        <div class="card" onclick="showNote('math')">Mathematics Notes</div>
+        <div class="card" onclick="showNote('phys')">Physics Notes</div>
+        <div class="card" onclick="showNote('bio')">Biology Notes</div>
+    </div>
+
+    <div id="note-viewer" class="hidden">
+        <div class="note-content" id="note-body"></div>
+        <button class="btn" onclick="showSection('notes-menu')">Close Notes</button>
+    </div>
+
+    <div id="subject-menu" class="hidden">
+        <button class="btn" onclick="goBack()">← Back</button>
+        <h2 style="text-align: center;">Select Subject for Quiz</h2>
+        <div class="card" onclick="startQuiz('math')">Math Quiz</div>
+        <div class="card" onclick="startQuiz('phys')">Physics Quiz</div>
+    </div>
+
+    <div id="quiz-box" class="quiz-box hidden">
+        <div id="q-text" style="font-size: 18px; font-weight: bold;"></div>
+        <div id="options"></div>
+    </div>
+</div>
+
+<script>
+    const notesData = {
+        math: `
+            <h2>Mathematics Summary</h2>
+            <p><b>1. Derivatives:</b> The derivative of x^n is n*x^(n-1). This is crucial for entrance exams.</p>
+            <p><b>2. Limits:</b> Remember that sin(x)/x as x approaches 0 is always 1.</p>
+            <p><b>3. Matrices:</b> To find the determinant of a 2x2 matrix [a,b; c,d], use (ad - bc).</p>
+        `,
+        phys: `
+            <h2>Physics Summary</h2>
+            <p><b>1. Newton's 2nd Law:</b> F = ma. Force equals mass times acceleration.</p>
+            <p><b>2. Work-Energy:</b> Work is the change in Kinetic Energy (KE).</p>
+            <p><b>3. Waves:</b> Speed of light (c) = 3 x 10^8 m/s. Sound cannot travel in a vacuum.</p>
+        `,
+        bio: `
+            <h2>Biology Summary</h2>
+            <p><b>1. Cell Theory:</b> All living things are made of cells. Mitochondria is the powerhouse.</p>
+            <p><b>2. Genetics:</b> Mendel is the father of genetics. DNA is a double helix.</p>
+        `
+    };
+
+    const quizData = {
+        math: [{q: "Derivative of x³?", a: "3x²", opt: ["x²", "3x²", "3x", "2x"]}],
+        phys: [{q: "Unit of Force?", a: "Newton", opt: ["Joule", "Newton", "Watt", "Volt"]}]
+    };
+
+    function showSection(id) {
+        document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function showNote(sub) {
+        document.getElementById('note-body').innerHTML = notesData[sub];
+        showSection('note-viewer');
+    }
+
+    function goBack() { showSection('main-menu'); }
+
+    let currentQ = [];
+    let idx = 0;
+
+    function startQuiz(sub) {
+        currentQ = quizData[sub];
+        idx = 0;
+        showSection('quiz-box');
+        displayQ();
+    }
+
+    function displayQ() {
+        const d = currentQ[idx];
+        document.getElementById('q-text').innerText = d.q;
+        const optDiv = document.getElementById('options');
+        optDiv.innerHTML = "";
+        d.opt.forEach(o => {
+            const btn = document.createElement("button");
+            btn.className = "option";
+            btn.innerText = o;
+            btn.onclick = () => {
+                if(o === d.a) btn.classList.add('correct');
+                else btn.classList.add('wrong');
+                setTimeout(() => { alert("Next version will have more questions!"); goBack(); }, 1000);
+            };
+            optDiv.appendChild(btn);
+        });
+    }
+</script>
+</body>
+            </html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sami Entrance Prep - Final</title>
     <style>
         :root { --main: #1e293b; --accent: #6366f1; --bg: #f8fafc; }
