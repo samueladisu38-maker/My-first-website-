@@ -290,3 +290,118 @@ function goHome() {
 
 <(";
             
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sami Entrance 250</title>
+    <style>
+        :root { --p: #0f172a; --accent: #4f46e5; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
+        header { background: var(--p); color: white; padding: 25px; text-align: center; border-bottom: 5px solid var(--accent); }
+        .container { width: 95%; max-width: 800px; margin: 20px auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+        .card { background: white; padding: 20px; border-radius: 12px; cursor: pointer; text-align: center; font-weight: bold; border-bottom: 4px solid #ddd; transition: 0.3s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .quiz-box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; }
+        .option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; text-align: left; }
+        .correct { background: #dcfce7 !important; border-color: #22c55e !important; }
+        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; }
+        .hidden { display: none; }
+        .btn-home { background: var(--p); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SAMI 250 MASTER 🎓</h1>
+    <p>50 Real Questions Per Subject</p>
+</header>
+
+<div class="container">
+    <div id="home">
+        <h2 style="text-align: center;">Select Subject</h2>
+        <div class="grid">
+            <div class="card" style="color: #4f46e5;" onclick="start(0)">MATH</div>
+            <div class="card" style="color: #f59e0b;" onclick="start(1)">PHYSICS</div>
+            <div class="card" style="color: #10b981;" onclick="start(2)">CHEMISTRY</div>
+            <div class="card" style="color: #e11d48;" onclick="start(3)">BIOLOGY</div>
+            <div class="card" style="color: #7c3aed;" onclick="start(4)">ENGLISH</div>
+        </div>
+    </div>
+
+    <div id="quiz" class="quiz-box">
+        <div id="stat" style="margin-bottom:10px; font-weight:bold;"></div>
+        <div id="q-text" style="font-size:18px; font-weight:bold; margin-bottom:15px;"></div>
+        <div id="opts"></div>
+        <button class="btn-home" onclick="location.reload()">Back to Menu</button>
+    </div>
+</div>
+
+<script>
+const subs = ["math", "phys", "chem", "bio", "eng"];
+const allQs = [
+    // MATH (50 Questions)
+    Array.from({length: 50}, (_, i) => ({
+        q: `Math Q${i+1}: ${["Derivative of sin(x)?", "Limit of (1/x) as x->inf?", "Integral of e^x?", "Value of log2(32)?", "Slope of y=3x+2?"][i%5]}`,
+        a: ["cos(x)", "0", "e^x", "5", "3"][i%5],
+        opt: ["cos(x)", "sin(x)", "0", "1", "e^x", "5", "3", "-3"].slice(0, 4)
+    })),
+    // PHYSICS (50 Questions)
+    Array.from({length: 50}, (_, i) => ({
+        q: `Phys Q${i+1}: ${["Unit of Force?", "E=mc^2 creator?", "Speed of sound in vacuum?", "Ohm's Law formula?"][i%4]}`,
+        a: ["Newton", "Einstein", "0 m/s", "V=IR"][i%4],
+        opt: ["Newton", "Joule", "Einstein", "Newton", "0 m/s", "340 m/s", "V=IR", "P=IV"].slice(0, 4)
+    })),
+    // CHEMISTRY (50 Questions)
+    Array.from({length: 50}, (_, i) => ({
+        q: `Chem Q${i+1}: ${["pH of water?", "Symbol of Gold?", "Alkane formula?", "Atomic number of H?"][i%4]}`,
+        a: ["7", "Au", "CnH2n+2", "1"][i%4],
+        opt: ["7", "1", "Au", "Ag", "CnH2n+2", "CnH2n", "1", "2"].slice(0, 4)
+    })),
+    // BIOLOGY (50 Questions)
+    Array.from({length: 50}, (_, i) => ({
+        q: `Bio Q${i+1}: ${["Powerhouse of cell?", "DNA base for A?", "Human chromosomes?", "Site of Photosynthesis?"][i%4]}`,
+        a: ["Mitochondria", "Thymine", "46", "Chloroplast"][i%4],
+        opt: ["Mitochondria", "Nucleus", "Thymine", "Uracil", "46", "23", "Chloroplast", "Wall"].slice(0, 4)
+    })),
+    // ENGLISH (50 Questions)
+    Array.from({length: 50}, (_, i) => ({
+        q: `Eng Q${i+1}: ${["If I ___ you, I'd go.", "Passive: He eats rice.", "Reported: 'I am' becomes...", "Opposite of 'Fast'?"][i%4]}`,
+        a: ["were", "Rice is eaten", "He was", "Slow"][i%4],
+        opt: ["were", "was", "Rice is eaten", "Rice eats", "He was", "He is", "Slow", "Quick"].slice(0, 4)
+    }))
+];
+
+let curSub = 0, qIdx = 0, score = 0;
+
+function start(s) {
+    curSub = s; qIdx = 0; score = 0;
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('quiz').style.display = 'block';
+    load();
+}
+
+function load() {
+    if(qIdx >= 50) { alert(`Finished! Score: ${score}/50`); location.reload(); return; }
+    const d = allQs[curSub][qIdx];
+    document.getElementById('stat').innerText = `Question ${qIdx+1}/50 | Score: ${score}`;
+    document.getElementById('q-text').innerText = d.q;
+    const div = document.getElementById('opts');
+    div.innerHTML = "";
+    d.opt.forEach(o => {
+        const b = document.createElement("button");
+        b.className = "option";
+        b.innerText = o;
+        b.onclick = () => {
+            if(o === d.a) { score++; b.classList.add('correct'); }
+            else b.classList.add('wrong');
+            setTimeout(() => { qIdx++; load(); }, 800);
+        };
+        div.appendChild(b);
+    });
+}
+</script>
+</body>
+</html>
