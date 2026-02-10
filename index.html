@@ -85,6 +85,41 @@
             "12": [{ q: "I ___ to school yesterday.", a: "went", opt: ["go", "gone", "went", "going"] }],
             "11": [], "10": [], "9": []
         }
+    }; const allQuestions = {
+        math: {
+            "12": [
+                { q: "What is the derivative of f(x) = sin(x)?", a: "cos(x)", opt: ["cos(x)", "-cos(x)", "sin(x)", "tan(x)"] },
+                { q: "Find the value of ∫ 2x dx.", a: "x² + C", opt: ["x² + C", "2x² + C", "x + C", "2 + C"] },
+                { q: "If A = {1, 2} and B = {2, 3}, what is A ∩ B?", a: "{2}", opt: ["{1, 2, 3}", "{2}", "{1, 3}", "Ø"] },
+                { q: "What is the slope of the line y = 3x + 5?", a: "3", opt: ["5", "3", "-3", "0"] },
+                { q: "The limit of (1/x) as x approaches infinity is:", a: "0", opt: ["1", "∞", "0", "-1"] },
+                { q: "Which of the following is a prime number?", a: "17", opt: ["15", "9", "17", "21"] },
+                { q: "What is the value of log2(32)?", a: "5", opt: ["4", "5", "6", "10"] },
+                { q: "The sum of the angles in a triangle is:", a: "180°", opt: ["90°", "180°", "270°", "360°"] },
+                { q: "What is the value of 5! (5 factorial)?", a: "120", opt: ["60", "100", "120", "25"] },
+                { q: "Solve for x: 2x - 4 = 10.", a: "7", opt: ["3", "5", "7", "14"] }
+            ],
+            "11": [], "10": [], "9": []
+        },
+        bio: {
+            "12": [
+                { q: "Which organelle is responsible for protein synthesis?", a: "Ribosome", opt: ["Nucleus", "Mitochondria", "Ribosome", "Golgi Body"] },
+                { q: "What is the genetic material in most living organisms?", a: "DNA", opt: ["RNA", "DNA", "Protein", "Glucose"] },
+                { q: "Who is known as the father of genetics?", a: "Gregor Mendel", opt: ["Darwin", "Mendel", "Pasteur", "Lamarck"] },
+                { q: "The process of cell division that produces gametes is:", a: "Meiosis", opt: ["Mitosis", "Meiosis", "Budding", "Fission"] },
+                { q: "Which blood type is known as the universal donor?", a: "O-", opt: ["A+", "B-", "AB+", "O-"] },
+                { q: "What is the main function of red blood cells?", a: "Transport oxygen", opt: ["Fight infection", "Clot blood", "Transport oxygen", "Store fat"] },
+                { q: "Which hormone regulates blood sugar levels?", a: "Insulin", opt: ["Adrenaline", "Insulin", "Estrogen", "Thyroxine"] },
+                { q: "The structural and functional unit of life is:", a: "Cell", opt: ["Tissue", "Organ", "Cell", "Atom"] },
+                { q: "Photosynthesis occurs in which organelle?", a: "Chloroplast", opt: ["Mitochondria", "Chloroplast", "Vacuole", "Nucleus"] },
+                { q: "What is the primary source of energy for the Earth?", a: "The Sun", opt: ["The Moon", "The Sun", "Electricity", "Plants"] }
+            ],
+            "11": [], "10": [], "9": []
+        },
+        // ለሌሎቹም እንደዚሁ መቀጠል ትችላለህ...
+        phys: { "12": [], "11": [], "10": [], "9": [] },
+        chem: { "12": [], "11": [], "10": [], "9": [] },
+        eng: { "12": [], "11": [], "10": [], "9": [] }
     };
 
     let currentSubject = "";
