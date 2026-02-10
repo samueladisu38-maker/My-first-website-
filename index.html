@@ -3,148 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Master Prep - Fixed</title>
+    <title>Sami Entrance Prep - Fast Edition</title>
     <style>
-        :root { --primary: #2563eb; --dark: #1e293b; --bg: #f8fafc; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: var(--dark); }
-        header { background: var(--dark); color: white; padding: 25px; text-align: center; border-bottom: 5px solid var(--primary); }
-        .container { max-width: 500px; margin: auto; padding: 15px; }
-        .card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 12px; cursor: pointer; border: 1px solid #e2e8f0; font-weight: 600; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        :root { --primary: #2563eb; --dark: #0f172a; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; color: var(--dark); }
+        header { background: var(--dark); color: white; padding: 20px; text-align: center; border-bottom: 5px solid var(--primary); }
+        .container { max-width: 480px; margin: auto; padding: 15px; }
+        .card { background: white; padding: 18px; border-radius: 12px; margin-bottom: 12px; cursor: pointer; border: 1px solid #e2e8f0; font-weight: 600; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.3s; }
         .card:hover { border-color: var(--primary); transform: translateY(-3px); background: #eff6ff; }
         .quiz-box { display: none; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; background: white; text-align: left; cursor: pointer; font-size: 16px; transition: 0.2s; }
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; background: white; text-align: left; cursor: pointer; font-size: 16px; }
         .correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
         .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
         .hidden { display: none; }
-        .loading { text-align: center; color: var(--primary); font-weight: bold; margin-bottom: 10px; display: none; }
+        .back-btn { background: none; border: none; color: var(--primary); cursor: pointer; font-weight: bold; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>SAMI MASTER PREP</h1>
-    <p>Everything is Connected!</p>
+    <h1>SAMI ENTRANCE PREP</h1>
+    <p>Everything is built-in and ready!</p>
 </header>
 
 <div class="container">
     <div id="subject-menu">
         <h3 style="text-align: center;">Choose Your Subject</h3>
-        <div id="loader" class="loading">Connecting to database...</div>
-        <div class="card" onclick="startApp('maths.json', 'Mathematics')">Mathematics <span>→</span></div>
-        <div class="card" onclick="startApp('phys.json', 'Physics')">Physics <span>→</span></div>
-        <div class="card" onclick="startApp('chem.json', 'Chemistry')">Chemistry <span>→</span></div>
-        <div class="card" onclick="startApp('bio.json', 'Biology')">Biology <span>→</span></div>
-        <div class="card" onclick="startApp('eng.json', 'English')">English <span>→</span></div>
+        <div class="card" onclick="showGrades('math')">Mathematics <span>→</span></div>
+        <div class="card" onclick="showGrades('phys')">Physics <span>→</span></div>
+        <div class="card" onclick="showGrades('chem')">Chemistry <span>→</span></div>
+        <div class="card" onclick="showGrades('bio')">Biology <span>→</span></div>
+        <div class="card" onclick="showGrades('eng')">English <span>→</span></div>
     </div>
 
     <div id="grade-menu" class="hidden">
-        <button onclick="location.reload()" style="background:none; border:none; color:var(--primary); font-weight:bold; cursor:pointer; margin-bottom:10px;">← Back</button>
+        <button class="back-btn" onclick="goHome()">← Back to Subjects</button>
         <h3 id="grade-title" style="text-align: center;">Select Grade</h3>
-        <div class="card" onclick="loadExam(9)">Grade 9</div>
-        <div class="card" onclick="loadExam(10)">Grade 10</div>
-        <div class="card" onclick="loadExam(11)">Grade 11</div>
-        <div class="card" onclick="loadExam(12)">Grade 12</div>
+        <div class="card" onclick="startQuiz(9)">Grade 9</div>
+        <div class="card" onclick="startQuiz(10)">Grade 10</div>
+        <div class="card" onclick="startQuiz(11)">Grade 11</div>
+        <div class="card" onclick="startQuiz(12)">Grade 12</div>
     </div>
 
-    <div id="quiz-area" class="quiz-box">
+    <div id="quiz-section" class="quiz-box">
         <div style="display:flex; justify-content:space-between; color:var(--primary); font-weight:bold; margin-bottom:15px;">
-            <span id="sub-tag"></span>
-            <span id="progress-tag"></span>
+            <span id="sub-label"></span>
+            <span id="progress-label"></span>
         </div>
-        <p id="question-display" style="font-size:18px; font-weight:bold;"></p>
-        <div id="options-display"></div>
+        <p id="question-text" style="font-size:18px; font-weight:bold; line-height:1.4;"></p>
+        <div id="option-list"></div>
     </div>
 
     <div id="result-page" class="quiz-box" style="text-align:center;">
-        <h2>Result</h2>
-        <h1 id="score-display" style="font-size:55px; color:var(--primary);"></h1>
-        <button class="card" style="width:100%; justify-content:center; background:var(--primary); color:white; border:none;" onclick="location.reload()">Try Again</button>
+        <h2>Quiz Completed!</h2>
+        <h1 id="score-display" style="font-size:55px; color:var(--primary);">0/0</h1>
+        <button class="card" style="width:100%; justify-content:center; background:var(--primary); color:white; border:none;" onclick="goHome()">Back to Main Menu</button>
     </div>
 </div>
 
 <script>
-    let examData = {}; 
-    let activeSub = "";
-    let activeGrade = "";
-    let qPosition = 0;
-    let finalPoints = 0;
+    // ጥያቄዎቹን እዚህ በአንድ ላይ አስቀምጠናቸዋል
+    const allQuestions = {
+        math: {
+            "12": [{ q: "What is the derivative of x²?", a: "2x", opt: ["x", "2x", "x²", "2"] }],
+            "11": [{ q: "What is the value of log10(100)?", a: "2", opt: ["1", "2", "3", "10"] }],
+            "10": [], "9": []
+        },
+        phys: {
+            "12": [{ q: "Unit of Force is?", a: "Newton", opt: ["Joule", "Newton", "Watt", "Pascal"] }],
+            "11": [], "10": [], "9": []
+        },
+        chem: {
+            "12": [{ q: "What is the PH of pure water?", a: "7", opt: ["1", "5", "7", "14"] }],
+            "11": [], "10": [], "9": []
+        },
+        bio: {
+            "12": [{ q: "The powerhouse of the cell is?", a: "Mitochondria", opt: ["Nucleus", "Mitochondria", "Ribosome", "Cell Wall"] }],
+            "11": [], "10": [], "9": []
+        },
+        eng: {
+            "12": [{ q: "I ___ to school yesterday.", a: "went", opt: ["go", "gone", "went", "going"] }],
+            "11": [], "10": [], "9": []
+        }
+    };
 
-    // ይህ ፈንክሽን ፋይሎቹን ያገናኛል
-    function startApp(file, label) {
-        document.getElementById("loader").style.display = "block";
-        activeSub = label;
+    let currentSubject = "";
+    let currentGrade = "";
+    let questionIdx = 0;
+    let score = 0;
 
-        // የአሁኑን የዌብሳይት አድራሻ ተጠቅሞ ፋይሉን መጥራት
-        const currentPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
-        const fileUrl = window.location.origin + currentPath + '/' + file;
-
-        fetch(fileUrl)
-            .then(res => {
-                if(!res.ok) throw new Error();
-                return res.json();
-            })
-            .then(data => {
-                examData = data;
-                document.getElementById("loader").style.display = "none";
-                document.getElementById("subject-menu").classList.add("hidden");
-                document.getElementById("grade-menu").classList.remove("hidden");
-                document.getElementById("grade-title").innerText = label + ": Select Grade";
-            })
-            .catch(err => {
-                document.getElementById("loader").style.display = "none";
-                alert("Error: " + file + " አልተገኘም! እባክህ index.html ባለበት ቦታ መኖሩን አረጋግጥ።");
-            });
+    function showGrades(sub) {
+        currentSubject = sub;
+        document.getElementById("subject-menu").classList.add("hidden");
+        document.getElementById("grade-menu").classList.remove("hidden");
+        document.getElementById("grade-title").innerText = sub.toUpperCase() + ": Select Grade";
     }
 
-    function loadExam(g) {
-        activeGrade = g.toString();
-        if (!examData[activeGrade] || examData[activeGrade].length === 0) {
-            alert("ለ Grade " + g + " ጥያቄ አልተጨመረም!");
+    function startQuiz(g) {
+        currentGrade = g.toString();
+        const questions = allQuestions[currentSubject][currentGrade];
+        
+        if (questions.length === 0) {
+            alert("No questions for this grade yet!");
             return;
         }
+
         document.getElementById("grade-menu").classList.add("hidden");
-        document.getElementById("quiz-area").style.display = "block";
-        displayQ();
+        document.getElementById("quiz-section").style.display = "block";
+        loadQuestion();
     }
 
-    function displayQ() {
-        const item = examData[activeGrade][qPosition];
-        document.getElementById("sub-tag").innerText = activeSub + " - G" + activeGrade;
-        document.getElementById("progress-tag").innerText = (qPosition + 1) + "/" + examData[activeGrade].length;
-        document.getElementById("question-display").innerText = item.q;
+    function loadQuestion() {
+        const qData = allQuestions[currentSubject][currentGrade][questionIdx];
+        document.getElementById("sub-label").innerText = currentSubject.toUpperCase() + " G" + currentGrade;
+        document.getElementById("progress-label").innerText = (questionIdx + 1) + "/" + allQuestions[currentSubject][currentGrade].length;
+        document.getElementById("question-text").innerText = qData.q;
         
-        const optBox = document.getElementById("options-display");
-        optBox.innerHTML = "";
+        const list = document.getElementById("option-list");
+        list.innerHTML = "";
         
-        item.opt.forEach(o => {
-            const b = document.createElement("button");
-            b.className = "option";
-            b.innerText = o;
-            b.onclick = () => {
-                const allButtons = document.querySelectorAll(".option");
-                allButtons.forEach(btn => btn.disabled = true);
-                if(o === item.a) {
-                    finalPoints++;
-                    b.classList.add("correct");
-                } else {
-                    b.classList.add("wrong");
-                    allButtons.forEach(btn => { if(btn.innerText === item.a) btn.classList.add("correct"); });
-                }
-                setTimeout(() => {
-                    qPosition++;
-                    if(qPosition < examData[activeGrade].length) displayQ();
-                    else showFinal();
-                }, 1000);
-            };
-            optBox.appendChild(b);
+        qData.opt.forEach(o => {
+            const btn = document.createElement("button");
+            btn.className = "option";
+            btn.innerText = o;
+            btn.onclick = () => check(btn, o, qData.a);
+            list.appendChild(btn);
         });
     }
 
-    function showFinal() {
-        document.getElementById("quiz-area").style.display = "none";
+    function check(btn, selected, correct) {
+        const buttons = document.querySelectorAll(".option");
+        buttons.forEach(b => b.disabled = true);
+
+        if (selected === correct) {
+            score++;
+            btn.classList.add("correct");
+        } else {
+            btn.classList.add("wrong");
+            buttons.forEach(b => { if(b.innerText === correct) b.classList.add("correct"); });
+        }
+
+        setTimeout(() => {
+            questionIdx++;
+            if (questionIdx < allQuestions[currentSubject][currentGrade].length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }, 1200);
+    }
+
+    function showResult() {
+        document.getElementById("quiz-section").style.display = "none";
         document.getElementById("result-page").style.display = "block";
-        document.getElementById("score-display").innerText = finalPoints + " / " + examData[activeGrade].length;
+        document.getElementById("score-display").innerText = score + " / " + allQuestions[currentSubject][currentGrade].length;
+    }
+
+    function goHome() {
+        location.reload();
     }
 </script>
 </body>
-    </html>
+        </html>
