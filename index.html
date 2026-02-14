@@ -1,407 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="am">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Entrance Master - Detailed Edition</title>
+    <title>Sami & His Love ❤️</title>
     <style>
-        :root {
-            --math: #4f46e5; --phys: #f59e0b; --chem: #10b981; 
-            --bio: #e11d48; --eng: #7c3aed; --dark: #0f172a; --bg: #f1f5f9;
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff5f5;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+            cursor: pointer;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; color: #1e293b; }
-        header { background: var(--dark); color: white; padding: 40px 20px; text-align: center; border-bottom: 6px solid var(--math); }
-        .container { width: 95%; max-width: 900px; margin: 20px auto; }
-        
-        /* Dashboard */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
-        .card { background: white; padding: 30px 10px; border-radius: 20px; cursor: pointer; text-align: center; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 6px solid #cbd5e1; }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
-        .c-math { border-color: var(--math); color: var(--math); }
-        .c-phys { border-color: var(--phys); color: var(--phys); }
-        .c-chem { border-color: var(--chem); color: var(--chem); }
-        .c-bio { border-color: var(--bio); color: var(--bio); }
-        .c-eng { border-color: var(--eng); color: var(--eng); }
 
-        /* Viewer */
-        .content-box { background: white; padding: 35px; border-radius: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); display: none; }
-        .nav-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .btn { padding: 12px 25px; border-radius: 12px; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-home { background: var(--dark); color: white; }
-        .tab-bar { display: flex; gap: 10px; margin-bottom: 25px; background: #f1f5f9; padding: 5px; border-radius: 15px; }
-        .tab-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; background: transparent; }
-        .active-tab { background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: var(--dark); }
-
-        /* Detailed Notes Styling */
-        .note-body { line-height: 1.8; font-size: 17px; }
-        .note-body h2 { color: var(--dark); border-left: 5px solid var(--math); padding-left: 15px; margin-top: 30px; }
-        .note-body h3 { color: #475569; background: #f8fafc; padding: 10px; border-radius: 8px; }
-        .highlight { color: #be123c; font-weight: bold; background: #fff1f2; padding: 2px 5px; border-radius: 4px; }
-        
-        /* Quiz */
-        .option { display: block; width: 100%; padding: 16px; margin: 12px 0; border: 2px solid #e2e8f0; border-radius: 12px; background: white; text-align: left; cursor: pointer; font-size: 16px; transition: 0.2s; }
-        .correct { background: #dcfce7 !important; border-color: #22c55e !important; }
-        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; }
-        .hidden { display: none; }
-    </style>
-</head>
-<body>
-
-<header>
-    <h1>SAMI ENTRANCE MASTER 🎓</h1>
-    <p>Comprehensive Grade 9-12 Study System</p>
-</header>
-
-<div class="container">
-    <div id="home">
-        <h2 style="text-align: center; margin-bottom: 25px;">Select Subject to Start Studying</h2>
-        <div class="grid">
-            <div class="card c-math" onclick="openSubject('math')">MATHEMATICS<br>📐</div>
-            <div class="card c-phys" onclick="openSubject('phys')">PHYSICS<br>⚛️</div>
-            <div class="card c-chem" onclick="openSubject('chem')">CHEMISTRY<br>🧪</div>
-            <div class="card c-bio" onclick="openSubject('bio')">BIOLOGY<br>🧬</div>
-            <div class="card c-eng" onclick="openSubject('eng')">ENGLISH<br>📖</div>
-        </div>
-    </div>
-
-    <div id="viewer" class="content-box">
-        <div class="nav-row">
-            <h2 id="view-title" style="margin:0;">Subject</h2>
-            <button class="btn btn-home" onclick="goHome()">Back to Menu</button>
-        </div>
-        
-        <div class="tab-bar">
-            <button id="btn-notes" class="tab-btn active-tab" onclick="switchTab('notes')">Detailed Notes</button>
-            <button id="btn-quiz" class="tab-btn" onclick="switchTab('quiz')">Practice Quiz</button>
-        </div>
-
-        <div id="notes-content" class="note-body"></div>
-
-        <div id="quiz-section" class="hidden">
-            <div id="q-text" style="font-size: 20px; font-weight: bold; margin-bottom: 25px; color: #0f172a;"></div>
-            <div id="options-container"></div>
-        </div>
-    </div>
-</div>
-
-<script>
-const masterDatabase = {
-    math: {
-        notes: `
-            <h2>1. Sequences and Series</h2>
-            <p><b>Arithmetic Sequence (AP):</b> A sequence where the difference between terms is constant. <br>
-            Formula: <span class="highlight">An = A1 + (n-1)d</span>. <br>
-            <b>Geometric Sequence (GP):</b> A sequence where each term is found by multiplying the previous one by a fixed ratio. <br>
-            Formula: <span class="highlight">Gn = G1 * r^(n-1)</span>. <br>
-            Sum of infinite GP: <span class="highlight">S∞ = G1 / (1-r)</span> (valid only if |r| < 1).</p>
-            
-            <h2>2. Limits and Continuity</h2>
-            <p>Limits describe the behavior of a function as it approaches a point. <br>
-            <b>Key Limit:</b> lim (sin x / x) as x → 0 is <span class="highlight">1</span>. <br>
-            <b>L'Hopital's Rule:</b> If a limit results in 0/0 or ∞/∞, take the derivative of the numerator and denominator separately.</p>
-
-            <h2>3. Differential Calculus</h2>
-            <p><b>Power Rule:</b> d/dx(x^n) = <span class="highlight">nx^(n-1)</span>. <br>
-            <b>Product Rule:</b> (uv)' = u'v + uv'. <br>
-            <b>Chain Rule:</b> Useful for composite functions: f(g(x))' = f'(g(x)) * g'(x).</p>
-        `,
-        quiz: [
-            {q: "What is the sum of an infinite GP with G1=1 and r=1/2?", a: "2", opt: ["1", "1.5", "2", "Infinity"]},
-            {q: "Derivative of ln(x)?", a: "1/x", opt: ["x", "1/x", "e^x", "0"]}
-        ]
-    },
-    phys: {
-        notes: `
-            <h2>1. Mechanics (Newton's Laws)</h2>
-            <p><b>1st Law:</b> Law of Inertia. <br>
-            <b>2nd Law:</b> <span class="highlight">F = ma</span> (Force = mass x acceleration). <br>
-            <b>3rd Law:</b> Action and reaction are equal and opposite.</p>
-            
-            <h2>2. Work, Energy, and Power</h2>
-            <p><b>Work:</b> W = F * d * cos(θ). Unit: Joule (J). <br>
-            <b>Kinetic Energy:</b> <span class="highlight">KE = ½mv²</span>. <br>
-            <b>Potential Energy:</b> <span class="highlight">PE = mgh</span>.</p>
-
-            <h2>3. Electromagnetism</h2>
-            <p><b>Ohm's Law:</b> <span class="highlight">V = IR</span>. <br>
-            <b>Electric Power:</b> P = VI = I²R = V²/R. <br>
-            <b>Magnetic Field:</b> B is measured in <span class="highlight">Tesla (T)</span>.</p>
-        `,
-        quiz: [
-            {q: "If mass is doubled and velocity is doubled, KE increases by?", a: "8 times", opt: ["2 times", "4 times", "8 times", "16 times"]},
-            {q: "Unit of Power?", a: "Watt", opt: ["Joule", "Watt", "Newton", "Volt"]}
-        ]
-    },
-    chem: {
-        notes: `
-            <h2>1. Atomic Structure</h2>
-            <p><b>Quantum Numbers:</b> n (size), l (shape), ml (orientation), ms (spin). <br>
-            <b>Pauli Exclusion Principle:</b> No two electrons can have the same 4 quantum numbers.</p>
-            
-            <h2>2. Chemical Bonding</h2>
-            <p><b>Ionic Bond:</b> Complete transfer of electrons. <br>
-            <b>Covalent Bond:</b> Sharing of electrons. <br>
-            <b>Electronegativity:</b> The tendency of an atom to attract electrons.</p>
-
-            <h2>3. Chemical Equilibrium & pH</h2>
-            <p><b>Le Chatelier's Principle:</b> If a system at equilibrium is disturbed, it shifts to counteract the disturbance. <br>
-            <b>pH Scale:</b> <span class="highlight">pH = -log[H+]</span>. Acids < 7, Neutral = 7, Bases > 7.</p>
-        `,
-        quiz: [
-            {q: "What is the pH of a 0.01M HCl solution?", a: "2", opt: ["1", "2", "7", "12"]},
-            {q: "Avogadro's number is?", a: "6.022 x 10^23", opt: ["3 x 10^8", "6.022 x 10^23", "9.81", "1.6 x 10^-19"]}
-        ]
-    },
-    bio: {
-        notes: `
-            <h2>1. Cell Biology</h2>
-            <p><b>Mitochondria:</b> Site of cellular respiration (ATP production). <br>
-            <b>Chloroplast:</b> Site of photosynthesis in plants. <br>
-            <b>Ribosomes:</b> Site of protein synthesis.</p>
-            
-            <h2>2. Genetics and DNA</h2>
-            <p><b>DNA Structure:</b> Double helix (Watson & Crick). Adenine pairs with Thymine (A-T). <br>
-            <b>Mendel's Laws:</b> Law of Segregation and Law of Independent Assortment.</p>
-
-            <h2>3. Human Physiology</h2>
-            <p><b>Circulatory System:</b> Heart pumps oxygenated blood via arteries and deoxygenated via veins. <br>
-            <b>Nervous System:</b> Neurons are the basic functional units.</p>
-        `,
-        quiz: [
-            {q: "Which base is NOT found in DNA?", a: "Uracil", opt: ["Adenine", "Guanine", "Uracil", "Thymine"]},
-            {q: "The 'Powerhouse' of the cell?", a: "Mitochondria", opt: ["Nucleus", "Ribosome", "Mitochondria", "Lysosome"]}
-        ]
-    },
-    eng: {
-        notes: `
-            <h2>1. Conditional Sentences</h2>
-            <p><b>Type 1:</b> Real possibility (If + Present, will + V1). <br>
-            <b>Type 2:</b> Unreal/Imaginary (If + Past Simple, would + V1). <br>
-            <b>Type 3:</b> Past Regret (If + Past Perfect, would have + V3).</p>
-            
-            <h2>2. Reported Speech</h2>
-            <p>When reporting, move tenses back: <br>
-            Present Simple → <b>Past Simple</b> <br>
-            Present Perfect → <b>Past Perfect</b> <br>
-            Will → <b>Would</b>.</p>
-
-            <h2>3. Active and Passive Voice</h2>
-            <p><b>Active:</b> Subject does the action. <br>
-            <b>Passive:</b> Object receives the action (Object + be + V3). <br>
-            Example: "The report <b>was written</b> by Sami."</p>
-        `,
-        quiz: [
-            {q: "If I ___ a bird, I would fly.", a: "were", opt: ["am", "was", "were", "be"]},
-            {q: "Change to Passive: 'He kills a snake'", a: "A snake is killed by him", opt: ["A snake killed him", "A snake is killed by him", "He was killed", "Snake is killing"]}
-        ]
-    }
-};
-
-let currentSubject = "";
-let quizIndex = 0;
-
-function openSubject(s) {
-    currentSubject = s;
-    document.getElementById('home').classList.add('hidden');
-    document.getElementById('viewer').style.display = 'block';
-    document.getElementById('view-title').innerText = s.toUpperCase() + " MASTER NOTES";
-    document.getElementById('notes-content').innerHTML = masterDatabase[s].notes;
-    switchTab('notes');
-}
-
-function switchTab(tab) {
-    if(tab === 'notes') {
-        document.getElementById('notes-content').classList.remove('hidden');
-        document.getElementById('quiz-section').classList.add('hidden');
-        document.getElementById('btn-notes').classList.add('active-tab');
-        document.getElementById('btn-quiz').classList.remove('active-tab');
-    } else {
-        document.getElementById('notes-content').classList.add('hidden');
-        document.getElementById('quiz-section').classList.remove('hidden');
-        document.getElementById('btn-quiz').classList.add('active-tab');
-        document.getElementById('btn-notes').classList.remove('active-tab');
-        quizIndex = 0;
-        loadQuestion();
-    }
-}
-
-function loadQuestion() {
-    const qData = masterDatabase[currentSubject].quiz[quizIndex];
-    if(!qData) {
-        alert("Well done! You have completed the practice.");
-        switchTab('notes');
-        return;
-    }
-    document.getElementById('q-text').innerText = qData.q;
-    const container = document.getElementById('options-container');
-    container.innerHTML = "";
-    qData.opt.forEach(o => {
-        const btn = document.createElement("button");
-        btn.className = "option";
-        btn.innerText = o;
-        btn.onclick = () => {
-            if(o === qData.a) btn.classList.add('correct');
-            else btn.classList.add('wrong');
-            setTimeout(() => { quizIndex++; loadQuestion(); }, 1000);
-        };
-        container.appendChild(btn);
-    });
-}
-
-function goHome() {
-    document.getElementById('home').classList.remove('hidden');
-    document.getElementById('viewer').style.display = 'none';
-}
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami 250 Entrance Challenge</title>
-    <style>
-        :root {
-            --primary: #0f172a; --math: #4f46e5; --phys: #f59e0b; 
-            --chem: #10b981; --bio: #e11d48; --eng: #7c3aed; --bg: #f8fafc;
+        .love-card {
+            text-align: center;
+            z-index: 10;
+            transition: transform 0.5s;
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; }
-        header { background: var(--primary); color: white; padding: 30px; text-align: center; border-bottom: 5px solid var(--math); }
-        .container { width: 95%; max-width: 800px; margin: 20px auto; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
-        .card { background: white; padding: 25px; border-radius: 15px; cursor: pointer; text-align: center; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 5px solid #ccc; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .c-math { border-color: var(--math); color: var(--math); }
-        .c-phys { border-color: var(--phys); color: var(--phys); }
-        .c-chem { border-color: var(--chem); color: var(--chem); }
-        .c-bio { border-color: var(--bio); color: var(--bio); }
-        .c-eng { border-color: var(--eng); color: var(--eng); }
 
-        .quiz-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); display: none; }
-        .option { display: block; width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 10px; background: white; text-align: left; cursor: pointer; font-size: 16px; }
-        .correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
-        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
-        .status { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; font-size: 14px; color: #64748b; }
-        .btn-home { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; margin-top: 15px; width: 100%; }
+        .frame {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 8px solid white;
+            box-shadow: 0 10px 30px rgba(225, 29, 72, 0.3);
+            overflow: hidden;
+            margin: 0 auto 25px;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .message {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        h2 { color: #e11d48; margin: 0 0 10px; }
+
+        .poem {
+            color: #4b5563;
+            font-style: italic;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Heart Particles */
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: moveUp 3s ease-out forwards;
+        }
+
+        @keyframes moveUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-500px) rotate(360deg) scale(0); opacity: 0; }
+        }
     </style>
 </head>
-<body>
+<body onclick="createHearts(event)">
 
-<(";
-            
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Entrance 250</title>
-    <style>
-        :root { --p: #0f172a; --accent: #4f46e5; --bg: #f8fafc; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
-        header { background: var(--p); color: white; padding: 25px; text-align: center; border-bottom: 5px solid var(--accent); }
-        .container { width: 95%; max-width: 800px; margin: 20px auto; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-        .card { background: white; padding: 20px; border-radius: 12px; cursor: pointer; text-align: center; font-weight: bold; border-bottom: 4px solid #ddd; transition: 0.3s; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .quiz-box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; }
-        .option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; text-align: left; }
-        .correct { background: #dcfce7 !important; border-color: #22c55e !important; }
-        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; }
-        .hidden { display: none; }
-        .btn-home { background: var(--p); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 15px; }
-    </style>
-</head>
-<body>
-
-<header>
-    <h1>SAMI 250 MASTER 🎓</h1>
-    <p>50 Real Questions Per Subject</p>
-</header>
-
-<div class="container">
-    <div id="home">
-        <h2 style="text-align: center;">Select Subject</h2>
-        <div class="grid">
-            <div class="card" style="color: #4f46e5;" onclick="start(0)">MATH</div>
-            <div class="card" style="color: #f59e0b;" onclick="start(1)">PHYSICS</div>
-            <div class="card" style="color: #10b981;" onclick="start(2)">CHEMISTRY</div>
-            <div class="card" style="color: #e11d48;" onclick="start(3)">BIOLOGY</div>
-            <div class="card" style="color: #7c3aed;" onclick="start(4)">ENGLISH</div>
+    <div class="love-card">
+        <div class="frame">
+            <img src="us_photo.jpg" alt="Sami & His Love">
+        </div>
+        
+        <div class="message">
+            <h2>Happy Valentine's Day!</h2>
+            <div class="poem">
+                "አንድ ላይ ስንቆም - አብረን ስንታይ፣<br>
+                ብርሃን ይወርዳል - ከሰማይ ሰማይ፤<br>
+                የዛሬው ቀን ይለፍ - በደስታ ካንቺ ጋር ሆኔ።"
+            </div>
+            <p style="color: #e11d48; font-weight: bold; margin-top: 10px;">እወድሻለሁ! ❤️</p>
         </div>
     </div>
 
-    <div id="quiz" class="quiz-box">
-        <div id="stat" style="margin-bottom:10px; font-weight:bold;"></div>
-        <div id="q-text" style="font-size:18px; font-weight:bold; margin-bottom:15px;"></div>
-        <div id="opts"></div>
-        <button class="btn-home" onclick="location.reload()">Back to Menu</button>
-    </div>
-</div>
-
-<script>
-const subs = ["math", "phys", "chem", "bio", "eng"];
-const allQs = [
-    // MATH (50 Questions)
-    Array.from({length: 50}, (_, i) => ({
-        q: `Math Q${i+1}: ${["Derivative of sin(x)?", "Limit of (1/x) as x->inf?", "Integral of e^x?", "Value of log2(32)?", "Slope of y=3x+2?"][i%5]}`,
-        a: ["cos(x)", "0", "e^x", "5", "3"][i%5],
-        opt: ["cos(x)", "sin(x)", "0", "1", "e^x", "5", "3", "-3"].slice(0, 4)
-    })),
-    // PHYSICS (50 Questions)
-    Array.from({length: 50}, (_, i) => ({
-        q: `Phys Q${i+1}: ${["Unit of Force?", "E=mc^2 creator?", "Speed of sound in vacuum?", "Ohm's Law formula?"][i%4]}`,
-        a: ["Newton", "Einstein", "0 m/s", "V=IR"][i%4],
-        opt: ["Newton", "Joule", "Einstein", "Newton", "0 m/s", "340 m/s", "V=IR", "P=IV"].slice(0, 4)
-    })),
-    // CHEMISTRY (50 Questions)
-    Array.from({length: 50}, (_, i) => ({
-        q: `Chem Q${i+1}: ${["pH of water?", "Symbol of Gold?", "Alkane formula?", "Atomic number of H?"][i%4]}`,
-        a: ["7", "Au", "CnH2n+2", "1"][i%4],
-        opt: ["7", "1", "Au", "Ag", "CnH2n+2", "CnH2n", "1", "2"].slice(0, 4)
-    })),
-    // BIOLOGY (50 Questions)
-    Array.from({length: 50}, (_, i) => ({
-        q: `Bio Q${i+1}: ${["Powerhouse of cell?", "DNA base for A?", "Human chromosomes?", "Site of Photosynthesis?"][i%4]}`,
-        a: ["Mitochondria", "Thymine", "46", "Chloroplast"][i%4],
-        opt: ["Mitochondria", "Nucleus", "Thymine", "Uracil", "46", "23", "Chloroplast", "Wall"].slice(0, 4)
-    })),
-    // ENGLISH (50 Questions)
-    Array.from({length: 50}, (_, i) => ({
-        q: `Eng Q${i+1}: ${["If I ___ you, I'd go.", "Passive: He eats rice.", "Reported: 'I am' becomes...", "Opposite of 'Fast'?"][i%4]}`,
-        a: ["were", "Rice is eaten", "He was", "Slow"][i%4],
-        opt: ["were", "was", "Rice is eaten", "Rice eats", "He was", "He is", "Slow", "Quick"].slice(0, 4)
-    }))
-];
-
-let curSub = 0, qIdx = 0, score = 0;
-
-function start(s) {
-    curSub = s; qIdx = 0; score = 0;
-    document.getElementById('home').classList.add('hidden');
-    document.getElementById('quiz').style.display = 'block';
-    load();
-}
-
-function load() {
-    if(qIdx >= 50) { alert(`Finished! Score: ${score}/50`); location.reload(); return; }
-    const d = allQs[curSub][qIdx];
-    document.getElementById('stat').innerText = `Question ${qIdx+1}/50 | Score: ${score}`;
-    document.getElementById('q-text').innerText = d.q;
-    const div = document.getElementById('opts');
-    div.innerHTML = "";
-    d.opt.forEach(o => {
-        const b = document.createElement("button");
-        b.className = "option";
-        b.innerText = o;
-        b.onclick = () => {
-            if(o === d.a) { score++; b.classList.add('correct'); }
-            else b.classList.add('wrong');
-            setTimeout(() => { qIdx++; load(); }, 800);
-        };
-        div.appendChild(b);
-    });
-}
-</script>
+    <script>
+        function createHearts(e) {
+            for (let i = 0; i < 10; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'floating-heart';
+                heart.style.left = e.clientX + 'px';
+                heart.style.top = e.clientY + 'px';
+                
+                const size = Math.random() * 20 + 10 + 'px';
+                heart.style.fontSize = size;
+                
+                const destX = (Math.random() - 0.5) * 200;
+                heart.style.setProperty('--x', destX + 'px');
+                
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 3000);
+            }
+        }
+    </script>
 </body>
 </html>
